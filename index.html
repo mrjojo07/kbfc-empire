@@ -229,39 +229,51 @@ recorder = new MediaRecorder(stream, {
     if(audioContext)audioContext.close();
   };
 
-  let raf=0;
-  let stopped=false;
-  const draw=()=>{
-    if(stopped)return;
-    ctx.fillStyle='#000';
-    ctx.fillRect(0,0,720,1280);
-    const vw=video.videoWidth, vh=video.videoHeight;
-    const scale = Math.min(720 / vw, 1280 / vh);
-const dw = vw * scale;
-const dh = vh * scale;
-const dx = (720 - dw) / 2;
-const dy = (1280 - dh) / 2;
+  
+let raf = 0;
+let stopped = false;
 
-ctx.fillStyle = "#000000";
-ctx.fillRect(0, 0, 720, 1280);
+const draw = () => {
+  if (stopped) return;
 
-ctx.filter = 'brightness(' +
-  document.getElementById('bright').value +
-  '%) contrast(' +
-  document.getElementById('contrast').value + '%)';
+  const outW = canvas.width;
+  const outH = canvas.height;
 
-ctx.filter = video.style.filter || "none";
-ctx.drawImage(video, dx, dy, dw, dh);
-ctx.filter = "none";
-    if(video.currentTime>=end||video.ended){
-      stopped=true;
-      cancelAnimationFrame(raf);
-      video.pause();
-      if(recorder.state!=='inactive')recorder.stop();
-      return;
-    }
-    raf=requestAnimationFrame(draw);
-  };
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, outW, outH);
+
+  const vw = video.videoWidth;
+  const vh = video.videoHeight;
+
+  if (vw && vh) {
+    const scale = Math.min(outW / vw, outH / vh);
+    const dw = vw * scale;
+    const dh = vh * scale;
+    const dx = (outW - dw) / 2;
+    const dy = (outH - dh) / 2;
+
+    ctx.filter =
+      'brightness(' +
+      document.getElementById('bright').value +
+      '%) contrast(' +
+      document.getElementById('contrast').value +
+      '%)';
+
+    ctx.drawImage(video, dx, dy, dw, dh);
+    ctx.filter = 'none';
+  }
+
+  if (video.currentTime >= end || video.ended) {
+    stopped = true;
+    cancelAnimationFrame(raf);
+    video.pause();
+    if (recorder.state !== 'inactive') recorder.stop();
+    return;
+  }
+
+  raf = requestAnimationFrame(draw);
+};
+
 
   status.textContent='Preparing video... Keep this page open.';
   download.style.display='none';
