@@ -75,6 +75,7 @@ document.getElementById('create').onclick=async()=>{
     return;
   }
 
+  const slowMotionSpeed = 0.5;
   const start=Math.max(0,Number(document.getElementById('start').value)||0);
   const end=Math.min(Number(document.getElementById('end').value)||30,video.duration);
   if(end<=start){status.textContent='End time must be greater than start time.';return;}
