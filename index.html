@@ -178,11 +178,19 @@ const stream = canvas.captureStream(fps);
     const audioDestination=audioContext.createMediaStreamDestination();
     audioSource.connect(audioDestination);
     audioDestination.stream.getAudioTracks().forEach(t=>stream.addTrack(t));
-  }catch(e){
-    status.textContent='Audio setup failed. Reload the page and try again.';
-    stream.getTracks().forEach(t=>t.stop());
-    return;
-  }
+
+}catch(e){
+  console.warn('Audio setup failed; exporting video without audio.', e);
+  status.textContent='Audio unavailable. Continuing video export without sound.';
+  try{
+    if(audioSource) audioSource.disconnect();
+  }catch(err){}
+  try{
+    if(audioContext) audioContext.close();
+  }catch(err){}
+  audioSource=null;
+  audioContext=null;
+}
 
   let mime='video/webm;codecs=vp8,opus';
   if(!MediaRecorder.isTypeSupported(mime))mime='video/webm';
