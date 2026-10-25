@@ -158,7 +158,16 @@ const stream = canvas.captureStream(fps);
   if(!MediaRecorder.isTypeSupported(mime))mime='video/webm';
   let recorder;
   try{
-    recorder=new MediaRecorder(stream,{mimeType:mime,videoBitsPerSecond:8000000,audioBitsPerSecond:128000});
+    
+const bitrate = Number(
+  document.getElementById('kbfcQualityLevel')?.value || 10000000
+);
+
+recorder = new MediaRecorder(stream, {
+  mimeType: mime,
+  videoBitsPerSecond: bitrate,
+  audioBitsPerSecond: 128000
+});
   }catch(e){
     status.textContent='Cannot start video export in this browser.';
     stream.getTracks().forEach(t=>t.stop());
