@@ -295,12 +295,15 @@ ctx.filter = "none";
       <div class="kbfc-demo vivid"></div>Vivid
     </button>
   </div>
+
   <p id="kbfcFilterStatus">Selected: Original</p>
 </div>
+
 <script>
 (function () {
   const cards = document.querySelectorAll('.kbfc-filter-card');
   const video = document.getElementById('video');
+
   const styles = {
     none: 'none',
     cinema: 'contrast(1.25) saturate(1.2)',
@@ -312,12 +315,22 @@ ctx.filter = "none";
   };
 
   cards.forEach(card => {
+    const demo = card.querySelector('.kbfc-demo');
+    if (demo) {
+      demo.style.backgroundImage =
+        "url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=300')";
+      demo.style.backgroundSize = 'cover';
+      demo.style.backgroundPosition = 'center';
+      demo.style.filter = styles[card.dataset.filter] || 'none';
+    }
+
     card.addEventListener('click', () => {
       cards.forEach(c => c.classList.remove('active'));
       card.classList.add('active');
 
       const name = card.dataset.filter;
-      if (video) video.style.filter = styles[name];
+      if (video) video.style.filter = styles[name] || 'none';
+
       document.getElementById('kbfcFilterStatus').textContent =
         'Selected: ' + card.textContent.trim();
     });
