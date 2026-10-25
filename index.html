@@ -346,6 +346,7 @@ ctx.filter = "none";
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  min-height: 90px;
 }
 
 .kbfc-effect-demo.glow {
@@ -394,23 +395,34 @@ ctx.filter = "none";
   <p style="font-size:12px;color:#cbd5e1">Tap an effect to select it</p>
   <div class="kbfc-effect-grid">
     <button class="kbfc-effect-card active" data-effect="none">None
-    </button>
-    <button class="kbfc-effect-card" data-effect="glow">Glow
-    </button>
-    <button class="kbfc-effect-card" data-effect="flash">Flash
-    </button>
-    <button class="kbfc-effect-card" data-effect="blur">Blur
-    </button>
-    <button class="kbfc-effect-card" data-effect="zoom">Zoom
-    </button>
-    <button class="kbfc-effect-card" data-effect="vignette">Vignette
-    </button>
-    <button class="kbfc-effect-card" data-effect="shake">Shake
-    </button>
-    <button class="kbfc-effect-card" data-effect="bw">B&W
-    </button>
-    <button class="kbfc-effect-card" data-effect="slow">Slow Motion
-    </button>
+    
+<button class="kbfc-effect-card active" data-effect="none">
+  <div class="kbfc-effect-demo"></div>None
+</button>
+<button class="kbfc-effect-card" data-effect="glow">
+  <div class="kbfc-effect-demo glow"></div>Glow
+</button>
+<button class="kbfc-effect-card" data-effect="flash">
+  <div class="kbfc-effect-demo flash"></div>Flash
+</button>
+<button class="kbfc-effect-card" data-effect="blur">
+  <div class="kbfc-effect-demo blur"></div>Blur
+</button>
+<button class="kbfc-effect-card" data-effect="zoom">
+  <div class="kbfc-effect-demo zoom"></div>Zoom
+</button>
+<button class="kbfc-effect-card" data-effect="vignette">
+  <div class="kbfc-effect-demo vignette"></div>Vignette
+</button>
+<button class="kbfc-effect-card" data-effect="shake">
+  <div class="kbfc-effect-demo shake"></div>Shake
+</button>
+<button class="kbfc-effect-card" data-effect="bw">
+  <div class="kbfc-effect-demo bw"></div>B&W
+</button>
+<button class="kbfc-effect-card" data-effect="slow">
+  <div class="kbfc-effect-demo slow"></div>Slow Motion
+</button>
   </div>
   <p id="kbfcEffectStatus">Selected: None</p>
 </div>
