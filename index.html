@@ -154,7 +154,10 @@ document.getElementById('create').onclick=async()=>{
   const canvas=document.createElement('canvas');
   
 const resolution = Number(document.getElementById('kbfcResolution')?.value || 1080);
-const fps = Number(document.getElementById('kbfcFps')?.value || 30);
+const fps = Math.min(
+  120,
+  Math.max(24, Number(document.getElementById('kbfcFps')?.value || 30))
+);
 
 const dimensions = {
   720:  { width: 720,  height: 1280 },
@@ -197,10 +200,12 @@ const stream = canvas.captureStream(fps);
   let recorder;
   try{
     
-const bitrate = Number(
-  document.getElementById('kbfcQualityLevel')?.value || 10000000
-);
-
+const bitrate = {
+  720:  5000000,
+  1080: 10000000,
+  1440: 20000000,
+  2160: 35000000
+}[resolution] || 10000000;
 recorder = new MediaRecorder(stream, {
   mimeType: mime,
   videoBitsPerSecond: bitrate,
