@@ -44,6 +44,14 @@ video{width:100%;max-height:420px;background:#000;border-radius:10px;margin-top:
   margin: 8px 0;
 }
 </style>
+<style>
+/* Login ചെയ്യുന്നതുവരെ Editor മറയ്ക്കുക */
+body > main,
+body > .kbfc-filters,
+body > .kbfc-effects {
+  display: none;
+}
+</style>
 </head>
 <body>
 <main>
@@ -596,13 +604,35 @@ effectButtons.forEach(button => {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const KBFC_SUPABASE_URL = "https://ortflloyumbyizeveboj.supabase.co/rest/v1/";
+const KBFC_SUPABASE_URL = "https://ortflloyumbyizeveboj.supabase.co";
 const KBFC_SUPABASE_KEY = "sb_publishable_WJAxQj68TRlHXanHV7Xe1A_8NEu8RTG";
 
 const kbfcSupabase = window.supabase.createClient(
   KBFC_SUPABASE_URL,
   KBFC_SUPABASE_KEY
 );
+
+async function kbfcCheckSession() {
+  const { data: { session } } = await kbfcSupabase.auth.getSession();
+
+  const authBox = document.getElementById("authBox");
+  const main = document.querySelector("body > main");
+  const extra = document.querySelectorAll(
+    "body > .kbfc-filters, body > .kbfc-effects"
+  );
+
+  if (session) {
+    authBox.style.display = "none";
+    main.style.display = "block";
+    extra.forEach(el => el.style.display = "block");
+  } else {
+    authBox.style.display = "block";
+    main.style.display = "none";
+    extra.forEach(el => el.style.display = "none");
+  }
+}
+
+kbfcCheckSession();
 
 async function kbfcSignUp() {
   const email = document.getElementById("authEmail").value.trim();
@@ -614,23 +644,49 @@ async function kbfcSignUp() {
     "Account created. Check your email if confirmation is required.";
 }
 
+
 async function kbfcLogin() {
   const email = document.getElementById("authEmail").value.trim();
   const password = document.getElementById("authPassword").value;
   const message = document.getElementById("authMessage");
 
   const { data, error } = await kbfcSupabase.auth.signInWithPassword({
-    email, password
+    email,
+    password
   });
 
-  message.textContent = error ? error.message :
-    "Logged in successfully: " + data.user.email;
+  if (error) {
+    message.textContent = "Login പരാജയപ്പെട്ടു: " + error.message;
+    return;
+  }
+
+  document.getElementById("authBox").style.display = "none";
+  document.querySelector("body > main").style.display = "block";
+
+  document.querySelectorAll(
+    "body > .kbfc-filters, body > .kbfc-effects"
+  ).forEach(el => el.style.display = "block");
+
+  message.textContent = "Login വിജയിച്ചു!";
 }
 
 async function kbfcLogout() {
   const { error } = await kbfcSupabase.auth.signOut();
-  document.getElementById("authMessage").textContent =
-    error ? error.message : "Logged out successfully.";
+
+  if (error) {
+    document.getElementById("authMessage").textContent = error.message;
+    return;
+  }
+
+  document.getElementById("authBox").style.display = "block";
+  document.querySelector("body > main").style.display = "none";
+
+  document.querySelectorAll(
+    "body > .kbfc-filters, body > .kbfc-effects"
+  ).forEach(el => el.style.display = "none");
+
+  document.getElementById("authMessage").textContent = "നിങ്ങൾ Logout ചെയ്തു.";
+
 }
 </script>
 </body>
