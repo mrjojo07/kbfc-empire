@@ -81,6 +81,37 @@ video{width:100%;max-height:420px;background:#000;border-radius:10px;margin-top:
 
   <p id="kbfcEffectStatus">Effect തിരഞ്ഞെടുക്കുക</p>
 </div>
+
+<div id="kbfcQuality" style="margin:15px 0;padding:14px;background:#171717;border-radius:12px;color:white">
+  <h3>🎬 Pro Export Quality</h3>
+
+  <label for="kbfcResolution">Resolution</label>
+  <select id="kbfcResolution" style="display:block;width:100%;padding:10px;margin:8px 0 14px">
+    <option value="720">HD 720p · 30 FPS</option>
+    <option value="1080">Full HD 1080p · 60 FPS</option>
+    <option value="1440">2K 1440p · 60 FPS</option>
+    <option value="2160" selected>MAX 4K · 120 FPS</option>
+  </select>
+
+  <label for="kbfcFps">Frame Rate</label>
+  <select id="kbfcFps" style="display:block;width:100%;padding:10px;margin:8px 0 14px">
+    <option value="30">30 FPS</option>
+    <option value="60">60 FPS</option>
+    <option value="120" selected>120 FPS</option>
+  </select>
+
+  <label for="kbfcQualityLevel">Export Bitrate</label>
+  <select id="kbfcQualityLevel" style="display:block;width:100%;padding:10px;margin:8px 0">
+    <option value="5000000">High · 5 Mbps</option>
+    <option value="10000000">Very High · 10 Mbps</option>
+    <option value="16000000" selected>Ultra · 16 Mbps</option>
+  </select>
+
+  <p style="font-size:12px;color:#cbd5e1">
+    Higher settings need more processing power and storage.
+    Actual resolution and FPS depend on browser and device support.
+  </p>
+</div>
 <button id="create">CREATE SHORT</button>
 <p id="status">Choose a video to begin.</p>
 <video id="result" controls playsinline></video>
