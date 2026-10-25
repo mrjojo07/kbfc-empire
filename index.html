@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KBFC Empire</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #101010;
+      color: white;
+      padding: 24px;
+    }
+    .app {
+      max-width: 500px;
+      margin: 30px auto;
+      background: #1c1c1c;
+      border: 1px solid #383838;
+      border-radius: 20px;
+      padding: 24px;
+    }
+    h1 { color: #ffcc00; margin-bottom: 8px; }
+    p { color: #cccccc; line-height: 1.5; }
+    button {
+      width: 100%;
+      padding: 15px;
+      border: 0;
+      border-radius: 10px;
+      background: #ffcc00;
+      color: #111;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 14px;
+    }
+    input {
+      width: 100%;
+      margin-top: 18px;
+      color: white;
+    }
+    #status {
+      margin-top: 18px;
+      overflow-wrap: anywhere;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <h1>KBFC Empire 🟡</h1>
+    <p>Football Shorts Creator</p>
+    <p>Select a video clip to preview it before editing.</p>
+
+    <input id="videoFile" type="file" accept="video/*">
+
+    <video id="preview" controls playsinline
+      style="display:none;width:100%;margin-top:18px;border-radius:12px">
+    </video>
+
+    <button onclick="prepareVideo()">CREATE SHORT</button>
+    <button onclick="showUploadInfo()">YOUTUBE UPLOAD</button>
+
+    <p id="status">Ready to select a video.</p>
+  </main>
+
+  <script>
+    const fileInput = document.getElementById('videoFile');
+    const preview = document.getElementById('preview');
+    const statusText = document.getElementById('status');
+
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+      statusText.textContent = 'Video selected: ' + file.name;
+    });
+
+    function prepareVideo() {
+      if (!fileInput.files.length) {
+        statusText.textContent = 'Please select a video first.';
+        return;
+      }
+      statusText.textContent =
+        'Preview ready. Automatic cutting and effects are not connected yet.';
+    }
+
+    function showUploadInfo() {
+      statusText.textContent =
+        'YouTube upload needs Google authorization and upload integration.';
+    }
+  </script>
+</body>
+</html>
