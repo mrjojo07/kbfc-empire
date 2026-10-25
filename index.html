@@ -122,10 +122,23 @@ document.getElementById('create').onclick=async()=>{
   if(end<=start){status.textContent='End time must be greater than start time.';return;}
 
   const canvas=document.createElement('canvas');
-  canvas.width=720;
-  canvas.height=1280;
-  const ctx=canvas.getContext('2d');
-  const stream=canvas.captureStream(30);
+  
+const resolution = Number(document.getElementById('kbfcResolution')?.value || 1080);
+const fps = Number(document.getElementById('kbfcFps')?.value || 30);
+
+const dimensions = {
+  720:  { width: 720,  height: 1280 },
+  1080: { width: 1080, height: 1920 },
+  1440: { width: 1440, height: 2560 },
+  2160: { width: 2160, height: 3840 }
+};
+
+canvas.width = dimensions[resolution].width;
+canvas.height = dimensions[resolution].height;
+
+const ctx = canvas.getContext('2d');
+const stream = canvas.captureStream(fps);
+
   let audioContext=null;
   let audioSource=null;
 
