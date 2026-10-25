@@ -231,5 +231,194 @@ ctx.filter = "none";
   effect.addEventListener('change', apply);
 })();
 </script>
+
+<style>
+.kbfc-filters {
+  background:#111827;color:white;padding:14px;
+  border-radius:14px;margin:15px 0;
+}
+.kbfc-filter-grid {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+}
+.kbfc-filter-card {
+  color:white;background:#252b38;border:2px solid transparent;
+  border-radius:10px;padding:5px;cursor:pointer;
+  text-align:center;font-size:12px;
+}
+.kbfc-filter-card.active {border-color:#22c55e;}
+.kbfc-demo {
+  width:100%;aspect-ratio:1/1;border-radius:7px;
+  background:linear-gradient(135deg,#f5b942,#e94b3c 45%,#1769aa);
+  position:relative;overflow:hidden;margin-bottom:6px;
+}
+.kbfc-demo:before {
+  content:"⚽";position:absolute;left:32%;top:23%;
+  font-size:35px;
+}
+.kbfc-demo:after {
+  content:"KBFC";position:absolute;bottom:8px;left:0;right:0;
+  font-weight:bold;font-size:19px;text-align:center;
+  text-shadow:0 2px 5px black;
+}
+.kbfc-demo.cinema {filter:contrast(1.35) saturate(1.3);}
+.kbfc-demo.vintage {filter:sepia(.8) contrast(1.1);}
+.kbfc-demo.bw {filter:grayscale(1);}
+.kbfc-demo.warm {filter:sepia(.3) saturate(1.5);}
+.kbfc-demo.cool {filter:hue-rotate(25deg) saturate(1.2);}
+.kbfc-demo.vivid {filter:saturate(2) contrast(1.1);}
+</style>
+<div class="kbfc-filters">
+  <h3>🎨 Choose Your Filter</h3>
+  <p style="font-size:12px;color:#cbd5e1">
+    Tap a preview to apply it to your video
+  </p>
+  <div class="kbfc-filter-grid">
+    <button class="kbfc-filter-card active" data-filter="none">
+      <div class="kbfc-demo"></div>Original
+    </button>
+    <button class="kbfc-filter-card" data-filter="cinema">
+      <div class="kbfc-demo cinema"></div>Cinematic
+    </button>
+    <button class="kbfc-filter-card" data-filter="vintage">
+      <div class="kbfc-demo vintage"></div>Vintage
+    </button>
+    <button class="kbfc-filter-card" data-filter="bw">
+      <div class="kbfc-demo bw"></div>B&W
+    </button>
+    <button class="kbfc-filter-card" data-filter="warm">
+      <div class="kbfc-demo warm"></div>Warm
+    </button>
+    <button class="kbfc-filter-card" data-filter="cool">
+      <div class="kbfc-demo cool"></div>Cool
+    </button>
+    <button class="kbfc-filter-card" data-filter="vivid">
+      <div class="kbfc-demo vivid"></div>Vivid
+    </button>
+  </div>
+  <p id="kbfcFilterStatus">Selected: Original</p>
+</div>
+<script>
+(function () {
+  const cards = document.querySelectorAll('.kbfc-filter-card');
+  const video = document.getElementById('video');
+  const styles = {
+    none: 'none',
+    cinema: 'contrast(1.25) saturate(1.2)',
+    vintage: 'sepia(.65) contrast(1.1)',
+    bw: 'grayscale(1)',
+    warm: 'sepia(.25) saturate(1.4)',
+    cool: 'hue-rotate(18deg) saturate(1.15)',
+    vivid: 'saturate(1.8) contrast(1.1)'
+  };
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      cards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      const name = card.dataset.filter;
+      if (video) video.style.filter = styles[name];
+      document.getElementById('kbfcFilterStatus').textContent =
+        'Selected: ' + card.textContent.trim();
+    });
+  });
+})();
+</script>
+<style>
+.kbfc-effects {
+  background:#111827;color:white;padding:14px;
+  border-radius:14px;margin:15px 0;
+}
+.kbfc-effect-grid {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.kbfc-effect-card {
+  background:#252b38;color:white;border:2px solid transparent;
+  border-radius:10px;padding:5px;font-size:12px;
+}
+.kbfc-effect-card.active {border-color:#22c55e;}
+.kbfc-effect-demo {
+  aspect-ratio:1/1;border-radius:7px;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:6px;font-size:34px;
+  background:linear-gradient(135deg,#152b62,#ed4b38,#ffca57);
+}
+.kbfc-effect-demo.glow {text-shadow:0 0 12px white;filter:brightness(1.35);}
+.kbfc-effect-demo.flash {background:white;color:#ef4444;}
+.kbfc-effect-demo.blur {filter:blur(2px);}
+.kbfc-effect-demo.zoom {font-size:48px;}
+.kbfc-effect-demo.vignette {box-shadow:inset 0 0 28px 12px black;}
+.kbfc-effect-demo.shake {transform:rotate(-8deg);}
+.kbfc-effect-demo.bw {filter:grayscale(1);}
+.kbfc-effect-demo.slow {background:linear-gradient(90deg,#111827,#38bdf8,#111827);}
+</style>
+
+<div class="kbfc-effects">
+  <h3>⚡ Choose Your Effect</h3>
+  <p style="font-size:12px;color:#cbd5e1">Tap an effect to select it</p>
+  <div class="kbfc-effect-grid">
+    <button class="kbfc-effect-card active" data-effect="none">
+      <div class="kbfc-effect-demo">⚽</div>None
+    </button>
+    <button class="kbfc-effect-card" data-effect="glow">
+      <div class="kbfc-effect-demo glow">✨</div>Glow
+    </button>
+    <button class="kbfc-effect-card" data-effect="flash">
+      <div class="kbfc-effect-demo flash">⚡</div>Flash
+    </button>
+    <button class="kbfc-effect-card" data-effect="blur">
+      <div class="kbfc-effect-demo blur">⚽</div>Blur
+    </button>
+    <button class="kbfc-effect-card" data-effect="zoom">
+      <div class="kbfc-effect-demo zoom">⚽</div>Zoom
+    </button>
+    <button class="kbfc-effect-card" data-effect="vignette">
+      <div class="kbfc-effect-demo vignette">🏟️</div>Vignette
+    </button>
+    <button class="kbfc-effect-card" data-effect="shake">
+      <div class="kbfc-effect-demo shake">⚽</div>Shake
+    </button>
+    <button class="kbfc-effect-card" data-effect="bw">
+      <div class="kbfc-effect-demo bw">⚽</div>B&W
+    </button>
+    <button class="kbfc-effect-card" data-effect="slow">
+      <div class="kbfc-effect-demo slow">⏱️</div>Slow Motion
+    </button>
+  </div>
+  <p id="kbfcEffectStatus">Selected: None</p>
+</div>
+
+<script>
+(function () {
+  const cards = document.querySelectorAll('.kbfc-effect-card');
+  const video = document.getElementById('video');
+
+  const css = {
+    none: 'none',
+    glow: 'brightness(1.2) contrast(1.1)',
+    flash: 'brightness(1.5)',
+    blur: 'blur(2px)',
+    zoom: 'none',
+    vignette: 'contrast(1.2)',
+    shake: 'none',
+    bw: 'grayscale(1)',
+    slow: 'none'
+  };
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      cards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      const effect = card.dataset.effect;
+      if (video) video.style.filter = css[effect];
+
+      document.getElementById('kbfcEffectStatus').textContent =
+        'Selected: ' + card.textContent.trim();
+    });
+  });
+})();
+</script>
 </body>
 </html>
