@@ -1,95 +1,179 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KBFC Empire</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #101010;
-      color: white;
-      padding: 24px;
-    }
-    .app {
-      max-width: 500px;
-      margin: 30px auto;
-      background: #1c1c1c;
-      border: 1px solid #383838;
-      border-radius: 20px;
-      padding: 24px;
-    }
-    h1 { color: #ffcc00; margin-bottom: 8px; }
-    p { color: #cccccc; line-height: 1.5; }
-    button {
-      width: 100%;
-      padding: 15px;
-      border: 0;
-      border-radius: 10px;
-      background: #ffcc00;
-      color: #111;
-      font-size: 16px;
-      font-weight: bold;
-      margin-top: 14px;
-    }
-    input {
-      width: 100%;
-      margin-top: 18px;
-      color: white;
-    }
-    #status {
-      margin-top: 18px;
-      overflow-wrap: anywhere;
-      font-size: 14px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KBFC Empire</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:20px;background:#101010;color:#fff;font-family:Arial,sans-serif}
+.app{max-width:500px;margin:20px auto;padding:22px;background:#1c1c1c;border:1px solid #444;border-radius:20px}
+h1{color:#ffcc00}
+p{color:#ccc;line-height:1.5}
+input,button{width:100%;margin:9px 0;padding:13px;border-radius:9px}
+input{background:#292929;color:white;border:1px solid #555}
+button{border:0;background:#ffcc00;color:#111;font-weight:bold;font-size:16px}
+button:disabled{opacity:.5}
+video{width:100%;max-height:440px;background:#000;margin-top:12px;border-radius:12px}
+label{display:block;margin-top:14px;color:#eee}
+#status{overflow-wrap:anywhere}
+</style>
 </head>
 <body>
-  <main class="app">
-    <h1>KBFC Empire 🟡</h1>
-    <p>Football Shorts Creator</p>
-    <p>Select a video clip to preview it before editing.</p>
+<main class="app">
+<h1>KBFC Empire 🟡</h1>
+<p>Football Shorts Editor</p>
+<label>Select video</label>
+<input id="file" type="file" accept="video/*">
+<video id="video" controls playsinline></video>
 
-    <input id="videoFile" type="file" accept="video/*">
+<label>Start time (seconds)</label>
+<input id="start" type="number" min="0" value="0" step="1">
 
-    <video id="preview" controls playsinline
-      style="display:none;width:100%;margin-top:18px;border-radius:12px">
-    </video>
+<label>End time (seconds)</label>
+<input id="end" type="number" min="1" value="20" step="1">
 
-    <button onclick="prepareVideo()">CREATE SHORT</button>
-    <button onclick="showUploadInfo()">YOUTUBE UPLOAD</button>
+<label>Brightness</label>
+<input id="bright" type="range" min="70" max="140" value="100">
 
-    <p id="status">Ready to select a video.</p>
-  </main>
+<label>Contrast</label>
+<input id="contrast" type="range" min="70" max="150" value="110">
 
-  <script>
-    const fileInput = document.getElementById('videoFile');
-    const preview = document.getElementById('preview');
-    const statusText = document.getElementById('status');
+<button id="render">CREATE SHORT</button>
+<p id="status">Choose a video to begin.</p>
+<video id="result" controls playsinline hidden></video>
+<a id="download" hidden download="kbfc-empire-short.webm">
+<button>DOWNLOAD EDITED VIDEO</button>
+</a>
+<canvas id="canvas" width="720" height="1280" hidden></canvas>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const video=$("video"), file=$("file"), status=$("status");
+let sourceURL="", resultURL="";
 
-    fileInput.addEventListener('change', function () {
-      const file = this.files[0];
-      if (!file) return;
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = 'block';
-      statusText.textContent = 'Video selected: ' + file.name;
+file.onchange=()=>{
+  const f=file.files[0];
+  if(!f)return;
+  if(sourceURL)URL.revokeObjectURL(sourceURL);
+  sourceURL=URL.createObjectURL(f);
+  video.src=sourceURL;
+  video.onloadedmetadata=()=>{
+    $("start").value=0;
+    $("end").value=Math.floor(video.duration);
+    status.textContent="Video ready. Duration: "+video.duration.toFixed(1)+" seconds.";
+  };
+  $("result").hidden=true;
+  $("download").hidden=true;
+};
+
+$("render").onclick=async()=>{
+  if(!file.files.length){status.textContent="Please select a video.";return;}
+  if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream){
+    status.textContent="This browser does not support video export. Try the latest Chrome.";
+    return;
+  }
+  const start=Number($("start").value);
+  const end=Number($("end").value);
+  if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start||end>video.duration){
+    status.textContent="Enter valid start and end times within the video duration.";
+    return;
+  }
+
+  const btn=$("render");
+  btn.disabled=true;
+  $("download").hidden=true;
+  status.textContent="Preparing video... Keep this page open.";
+
+  let audioCtx, recorder, raf;
+  try{
+    const canvas=$("canvas"), ctx=canvas.getContext("2d");
+    const stream=canvas.captureStream(30);
+    let audioDestination=null;
+
+    try{
+      audioCtx=new AudioContext();
+      await audioCtx.resume();
+      const audioSource=audioCtx.createMediaElementSource(video);
+      audioDestination=audioCtx.createMediaStreamDestination();
+      audioSource.connect(audioDestination);
+      audioSource.connect(audioCtx.destination);
+      audioDestination.stream.getAudioTracks().forEach(t=>stream.addTrack(t));
+    }catch(e){
+      if(audioCtx)await audioCtx.close().catch(()=>{});
+      audioCtx=null;
+      status.textContent="Exporting video without audio: browser audio capture is unavailable.";
+    }
+
+    const mime=[
+      "video/webm;codecs=vp9,opus",
+      "video/webm;codecs=vp8,opus",
+      "video/webm"
+    ].find(type=>MediaRecorder.isTypeSupported(type));
+    if(!mime)throw new Error("WebM export is not supported in this browser.");
+
+    const chunks=[];
+    recorder=new MediaRecorder(stream,{mimeType:mime});
+    recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+    const stopped=new Promise((resolve,reject)=>{
+      recorder.onstop=resolve;
+      recorder.onerror=()=>reject(new Error("Video recording failed."));
     });
 
-    function prepareVideo() {
-      if (!fileInput.files.length) {
-        statusText.textContent = 'Please select a video first.';
+    const vw=video.videoWidth, vh=video.videoHeight;
+    if(!vw||!vh)throw new Error("Could not read video dimensions.");
+    const targetRatio=9/16, sourceRatio=vw/vh;
+    let sx=0,sy=0,sw=vw,sh=vh;
+    if(sourceRatio>targetRatio){sw=vh*targetRatio;sx=(vw-sw)/2;}
+    else{sh=vw/targetRatio;sy=(vh-sh)/2;}
+
+    const draw=()=>{
+      ctx.filter=`brightness(${$("bright").value}%) contrast(${$("contrast").value}%)`;
+      ctx.drawImage(video,sx,sy,sw,sh,0,0,720,1280);
+      ctx.filter="none";
+      if(!recorder || recorder.state!=="recording")return;
+      if(video.currentTime>=end || video.ended){
+        recorder.stop();
+        video.pause();
         return;
       }
-      statusText.textContent =
-        'Preview ready. Automatic cutting and effects are not connected yet.';
-    }
+      raf=requestAnimationFrame(draw);
+    };
 
-    function showUploadInfo() {
-      statusText.textContent =
-        'YouTube upload needs Google authorization and upload integration.';
-    }
-  </script>
+    video.pause();
+    video.currentTime=start;
+    await new Promise((resolve,reject)=>{
+      video.onseeked=resolve;
+      video.onerror=()=>reject(new Error("Unable to seek in video."));
+    });
+    await video.play();
+    recorder.start(250);
+    draw();
+    status.textContent="Editing... Please keep Chrome open until export finishes.";
+    await stopped;
+
+    cancelAnimationFrame(raf);
+    stream.getTracks().forEach(t=>t.stop());
+    if(audioCtx)await audioCtx.close().catch(()=>{});
+
+    const blob=new Blob(chunks,{type:"video/webm"});
+    if(resultURL)URL.revokeObjectURL(resultURL);
+    resultURL=URL.createObjectURL(blob);
+    $("result").src=resultURL;
+    $("result").hidden=false;
+    $("download").href=resultURL;
+    $("download").hidden=false;
+    status.textContent="Short created! Preview it, then download your WebM video.";
+  }catch(e){
+    if(recorder&&recorder.state==="recording")recorder.stop();
+    if(raf)cancelAnimationFrame(raf);
+    if(audioCtx)await audioCtx.close().catch(()=>{});
+    status.textContent="Export failed: "+e.message+". Try a shorter clip.";
+  }finally{
+    btn.disabled=false;
+  }
+};
+</script>
 </body>
 </html>
