@@ -134,12 +134,22 @@ document.getElementById('create').onclick=async()=>{
     ctx.fillStyle='#000';
     ctx.fillRect(0,0,720,1280);
     const vw=video.videoWidth, vh=video.videoHeight;
-    const scale=Math.max(720/vw,1280/vh);
-    const sw=720/scale, sh=1280/scale;
-    const sx=(vw-sw)/2, sy=(vh-sh)/2;
-    ctx.filter='brightness('+document.getElementById('bright').value+'%) contrast('+document.getElementById('contrast').value+'%)';
-    ctx.drawImage(video,sx,sy,sw,sh,0,0,720,1280);
-    ctx.filter='none';
+    const scale = Math.min(720 / vw, 1280 / vh);
+const dw = vw * scale;
+const dh = vh * scale;
+const dx = (720 - dw) / 2;
+const dy = (1280 - dh) / 2;
+
+ctx.fillStyle = "#000000";
+ctx.fillRect(0, 0, 720, 1280);
+
+ctx.filter = 'brightness(' +
+  document.getElementById('bright').value +
+  '%) contrast(' +
+  document.getElementById('contrast').value + '%)';
+
+ctx.drawImage(video, dx, dy, dw, dh);
+ctx.filter = "none";
     if(video.currentTime>=end||video.ended){
       stopped=true;
       cancelAnimationFrame(raf);
