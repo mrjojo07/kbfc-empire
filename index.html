@@ -190,6 +190,7 @@ ctx.filter = 'brightness(' +
   '%) contrast(' +
   document.getElementById('contrast').value + '%)';
 
+ctx.filter = video.style.filter || "none";
 ctx.drawImage(video, dx, dy, dw, dh);
 ctx.filter = "none";
     if(video.currentTime>=end||video.ended){
