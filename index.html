@@ -336,11 +336,48 @@ ctx.filter = "none";
   border-radius:10px;padding:5px;font-size:12px;
 }
 .kbfc-effect-card.active {border-color:#22c55e;}
+
 .kbfc-effect-demo {
-  aspect-ratio:1/1;border-radius:7px;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
-  margin-bottom:6px;font-size:34px;
-  background:linear-gradient(135deg,#152b62,#ed4b38,#ffca57);
+  aspect-ratio: 1 / 1;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  background-image: url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=300");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.kbfc-effect-demo.glow {
+  filter: brightness(1.25) contrast(1.1);
+}
+
+.kbfc-effect-demo.flash {
+  filter: brightness(1.5);
+}
+
+.kbfc-effect-demo.blur {
+  filter: blur(1px);
+}
+
+.kbfc-effect-demo.zoom {
+  background-size: 150%;
+}
+
+.kbfc-effect-demo.vignette {
+  box-shadow: inset 0 0 20px #000;
+}
+
+.kbfc-effect-demo.shake {
+  filter: saturate(1.5);
+}
+
+.kbfc-effect-demo.bw {
+  filter: grayscale(1);
+}
+
+.kbfc-effect-demo.slow {
+  filter: sepia(0.3);
 }
 .kbfc-effect-demo.glow {text-shadow:0 0 12px white;filter:brightness(1.35);}
 .kbfc-effect-demo.flash {background:white;color:#ef4444;}
