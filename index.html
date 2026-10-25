@@ -278,12 +278,17 @@ ctx.filter = "none";
     recorder.start(1000);
     draw();
     status.textContent='Creating Short... Keep the screen on and do not leave this page.';
-  }catch(e){
-    stopped=true;
-    if(recorder.state!=='inactive')recorder.stop();
-    status.textContent='Could not start. Reload the page and try a shorter clip.';
-  }
-};
+
+    }catch(e){
+     console.error('EXPORT FAILED:', e);
+     stopped=true;
+     status.textContent='Export error: ' + (e.name || '') + ' - ' + (e.message || e);
+     try {
+       if(recorder && recorder.state !== 'inactive') recorder.stop();
+     } catch(err) {}
+   }
+
+ };
 </script>
 <script src="highlights.js"></script>
 <style>
