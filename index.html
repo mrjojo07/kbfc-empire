@@ -275,7 +275,7 @@ ctx.filter = "none";
     if (audioContext && audioContext.state !== 'closed') {
   await audioContext.resume();
     }
-    video.playbackRate = slowMotionSpeed;
+    video.playbackRate = 1;
     await video.play();
     recorder.start(1000);
     draw();
