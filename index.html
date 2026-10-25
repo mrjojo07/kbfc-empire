@@ -272,7 +272,9 @@ ctx.filter = "none";
       const timeout=setTimeout(()=>reject(new Error('seek timeout')),15000);
       video.addEventListener('seeked',()=>{clearTimeout(timeout);resolve();},{once:true});
     });
-    await audioContext.resume();
+    if (audioContext && audioContext.state !== 'closed') {
+  await audioContext.resume();
+    }
     video.playbackRate = slowMotionSpeed;
     await video.play();
     recorder.start(1000);
