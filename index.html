@@ -575,5 +575,63 @@ effectButtons.forEach(button => {
   });
 });
 </script>
+
+<!-- KBFC Empire Login / Signup -->
+<section id="authBox" style="max-width:360px;margin:25px auto;padding:20px;border:1px solid #444;border-radius:12px;background:#111;color:white;font-family:Arial">
+  <h2>KBFC Empire</h2>
+  <h3>Login / Sign Up</h3>
+
+  <input id="authEmail" type="email" placeholder="Email address"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:6px 0">
+
+  <input id="authPassword" type="password" placeholder="Password (minimum 6 characters)"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:6px 0">
+
+  <button onclick="kbfcSignUp()" style="padding:12px;width:100%;margin-top:8px">Sign Up</button>
+  <button onclick="kbfcLogin()" style="padding:12px;width:100%;margin-top:8px">Login</button>
+  <button onclick="kbfcLogout()" style="padding:12px;width:100%;margin-top:8px">Logout</button>
+
+  <p id="authMessage">Please login or create an account.</p>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const KBFC_SUPABASE_URL = "https://ortflloyumbyizeveboj.supabase.co/rest/v1/";
+const KBFC_SUPABASE_KEY = "sb_publishable_WJAxQj68TRlHXanHV7Xe1A_8NEu8RTG";
+
+const kbfcSupabase = window.supabase.createClient(
+  KBFC_SUPABASE_URL,
+  KBFC_SUPABASE_KEY
+);
+
+async function kbfcSignUp() {
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+
+  const { error } = await kbfcSupabase.auth.signUp({ email, password });
+  message.textContent = error ? error.message :
+    "Account created. Check your email if confirmation is required.";
+}
+
+async function kbfcLogin() {
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+
+  const { data, error } = await kbfcSupabase.auth.signInWithPassword({
+    email, password
+  });
+
+  message.textContent = error ? error.message :
+    "Logged in successfully: " + data.user.email;
+}
+
+async function kbfcLogout() {
+  const { error } = await kbfcSupabase.auth.signOut();
+  document.getElementById("authMessage").textContent =
+    error ? error.message : "Logged out successfully.";
+}
+</script>
 </body>
 </html>
