@@ -16,6 +16,33 @@ input,button{width:100%;padding:12px;border-radius:8px;border:0;margin-top:5px}
 button{background:#ffc928;color:#151515;font-weight:bold;font-size:16px}
 video{width:100%;max-height:420px;background:#000;border-radius:10px;margin-top:12px}
 #status{white-space:pre-wrap;color:#ffc928}
+
+/* KBFC Empire Effects */
+.kbfc-effect-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.kbfc-effect-buttons button {
+  padding: 10px 14px;
+  border: 1px solid #555;
+  border-radius: 10px;
+  background: #202020;
+  color: white;
+  cursor: pointer;
+}
+
+.kbfc-effect-buttons button.active {
+  background: #e5a900;
+  color: black;
+}
+
+#kbfcEffectStatus {
+  font-size: 14px;
+  margin: 8px 0;
+}
 </style>
 </head>
 <body>
@@ -40,6 +67,20 @@ video{width:100%;max-height:420px;background:#000;border-radius:10px;margin-top:
 <label>Contrast</label>
 <input id="contrast" type="range" min="50" max="150" value="100">
 
+
+<div id="kbfcEffects">
+  <h3>✨ KBFC Empire Effects</h3>
+
+  <div class="kbfc-effect-buttons">
+    <button type="button" data-effect="none">Original</button>
+    <button type="button" data-effect="glow">✨ Glow</button>
+    <button type="button" data-effect="blur">🌫️ Blur</button>
+    <button type="button" data-effect="flash">⚡ Flash</button>
+    <button type="button" data-effect="shake">📳 Shake</button>
+  </div>
+
+  <p id="kbfcEffectStatus">Effect തിരഞ്ഞെടുക്കുക</p>
+</div>
 <button id="create">CREATE SHORT</button>
 <p id="status">Choose a video to begin.</p>
 <video id="result" controls playsinline></video>
@@ -375,6 +416,39 @@ ctx.filter = "none";
     });
   });
 })();
+
+const effectButtons = document.querySelectorAll(
+  '#kbfcEffects [data-effect]'
+);
+
+let selectedEffect = 'none';
+
+effectButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    effectButtons.forEach(b => b.classList.remove('active'));
+    button.classList.add('active');
+
+    selectedEffect = button.dataset.effect;
+
+    const effectStyles = {
+      none: 'none',
+      glow: 'brightness(1.2) contrast(1.1)',
+      blur: 'blur(2px)',
+      flash: 'brightness(1.7)',
+      shake: 'contrast(1.2)'
+    };
+
+    const effectStatus = document.getElementById('kbfcEffectStatus');
+    if (effectStatus) {
+      effectStatus.textContent =
+        'Selected effect: ' + selectedEffect;
+    }
+
+    if (video) {
+      video.style.filter = effectStyles[selectedEffect] || 'none';
+    }
+  });
+});
 </script>
 </body>
 </html>
