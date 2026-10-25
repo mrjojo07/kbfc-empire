@@ -171,6 +171,7 @@ ctx.filter = "none";
       video.addEventListener('seeked',()=>{clearTimeout(timeout);resolve();},{once:true});
     });
     await audioContext.resume();
+    video.playbackRate = slowMotionSpeed;
     await video.play();
     recorder.start(1000);
     draw();
