@@ -909,5 +909,57 @@ video {
   }
 }
 </style>
+
+<style>
+/* Clean video preview layout */
+.card video,
+.card #videoPreview {
+  width: 100%;
+  max-height: 65vh;
+  object-fit: contain;
+  background: #111827;
+  border-radius: 14px;
+  margin: 12px 0;
+}
+
+.card label {
+  display: block;
+  font-weight: 600;
+  color: #344054;
+  margin: 14px 0 6px;
+}
+
+.card input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px dashed #b9c5d8;
+  border-radius: 12px;
+}
+
+.card input[type="range"] {
+  width: 100%;
+  accent-color: #2457d6;
+}
+
+.card button {
+  background: #2457d6;
+  color: #fff;
+  margin: 5px 4px 5px 0;
+}
+
+.card button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .card video,
+  .card #videoPreview {
+    max-height: 45vh;
+  }
+}
+</style>
 </body>
 </html>
