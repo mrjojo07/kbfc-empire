@@ -178,6 +178,34 @@ button {
 <input id="file" type="file" accept="video/*">
 <video id="video" controls playsinline></video>
 
+<div id="kbfcTimeline" class="kbfc-timeline">
+  <div class="kbfc-timeline-head">
+    <strong>✂️ Timeline</strong>
+    <span id="kbfcCurrentTime">00:00 / 00:00</span>
+  </div>
+
+  <input
+    id="kbfcSeek"
+    type="range"
+    min="0"
+    max="100"
+    value="0"
+    step="0.1"
+    aria-label="Video timeline"
+  >
+
+  <div class="kbfc-time-labels">
+    <span>START</span>
+    <span>END</span>
+  </div>
+
+  <div class="kbfc-timeline-actions">
+    <button type="button" id="kbfcPlay">▶ Play</button>
+    <button type="button" id="kbfcSetStart">Set Start</button>
+    <button type="button" id="kbfcSetEnd">Set End</button>
+  </div>
+</div>
+
 <label>Start time (seconds)</label>
 <input id="start" type="number" min="0" value="0">
 
@@ -1377,5 +1405,108 @@ select:focus-visible {
   }
 }
 </style>
+
+<style>
+.kbfc-timeline {
+  background: #1b1c20;
+  border: 1px solid #34353c;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 12px 0;
+  color: #f5f5f7;
+}
+.kbfc-timeline-head,
+.kbfc-time-labels,
+.kbfc-timeline-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.kbfc-timeline-head span,
+.kbfc-time-labels {
+  color: #a1a1aa;
+  font-size: 12px;
+}
+#kbfcSeek {
+  width: 100%;
+  accent-color: #b7f34a;
+  margin: 16px 0 8px;
+}
+.kbfc-timeline-actions button {
+  flex: 1;
+  min-height: 42px;
+  background: #292a30;
+  color: white;
+  border: 1px solid #45464d;
+  border-radius: 9px;
+}
+@media(max-width: 380px) {
+  .kbfc-timeline-actions {
+    flex-wrap: wrap;
+  }
+}
+</style>
+
+<script>
+(function () {
+  const video = document.getElementById("video");
+  const seek = document.getElementById("kbfcSeek");
+  const time = document.getElementById("kbfcCurrentTime");
+  const play = document.getElementById("kbfcPlay");
+  const start = document.getElementById("start");
+  const end = document.getElementById("end");
+
+  if (!video || !seek || !time || !play || !start || !end) return;
+
+  function stamp(seconds) {
+    if (!Number.isFinite(seconds)) seconds = 0;
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return String(m).padStart(2, "0") + ":" +
+           String(s).padStart(2, "0");
+  }
+
+  function updateTimeline() {
+    const duration = Number.isFinite(video.duration) ? video.duration : 0;
+    seek.max = duration || 100;
+    seek.value = video.currentTime || 0;
+    time.textContent = stamp(video.currentTime) + " / " + stamp(duration);
+  }
+
+  video.addEventListener("loadedmetadata", updateTimeline);
+  video.addEventListener("timeupdate", updateTimeline);
+  video.addEventListener("durationchange", updateTimeline);
+
+  seek.addEventListener("input", function () {
+    if (Number.isFinite(video.duration)) {
+      video.currentTime = Number(seek.value);
+    }
+  });
+
+  play.addEventListener("click", function () {
+    if (!video.src) {
+      alert("ആദ്യം ഒരു വീഡിയോ Upload ചെയ്യൂ.");
+      return;
+    }
+    if (video.paused) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  });
+
+  video.addEventListener("play", () => play.textContent = "⏸ Pause");
+  video.addEventListener("pause", () => play.textContent = "▶ Play");
+
+  document.getElementById("kbfcSetStart").addEventListener("click", () => {
+    start.value = video.currentTime.toFixed(1);
+  });
+
+  document.getElementById("kbfcSetEnd").addEventListener("click", () => {
+    end.value = video.currentTime.toFixed(1);
+  });
+})();
+</script>
 </body>
 </html>
