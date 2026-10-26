@@ -223,6 +223,32 @@ button {
 <button id="create">CREATE SHORT</button>
 <p id="status">Choose a video to begin.</p>
 <video id="result" controls playsinline></video>
+<div class="card" id="kbfcProjects">
+  <h3>💾 My Projects</h3>
+
+  <label for="projectName">Project name</label>
+  <input id="projectName" type="text"
+         placeholder="e.g. KBFC Match Highlights">
+
+  <button type="button" onclick="kbfcSaveProject()">
+    Save Project
+  </button>
+
+  <label for="savedProjects">Saved projects</label>
+  <select id="savedProjects">
+    <option value="">Select a project</option>
+  </select>
+
+  <button type="button" onclick="kbfcOpenProject()">
+    Open Project
+  </button>
+
+  <button type="button" onclick="kbfcDeleteProject()">
+    Delete Project
+  </button>
+
+  <p id="projectMessage">Your projects will appear here.</p>
+</div>
 <a id="download" style="display:none;color:#ffc928" download="KBFC-Empire-Short.webm">DOWNLOAD EDITED VIDEO</a>
 </div>
 </main>
@@ -1063,5 +1089,124 @@ video {
   outline-offset: 2px;
 }
 </style>
+<script>
+const KBFC_PROJECTS_KEY = "kbfcEmpireProjects";
+
+function kbfcGetProjects() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(KBFC_PROJECTS_KEY) || "[]"
+    );
+  } catch (error) {
+    return [];
+  }
+}
+
+function kbfcRefreshProjects(selectedId = "") {
+  const select = document.getElementById("savedProjects");
+  const projects = kbfcGetProjects();
+
+  select.innerHTML = '<option value="">Select a project</option>';
+
+  projects.forEach(project => {
+    const option = document.createElement("option");
+    option.value = project.id;
+    option.textContent = project.name;
+    select.appendChild(option);
+  });
+
+  select.value = selectedId;
+}
+
+function kbfcSaveProject() {
+  const name = document.getElementById("projectName")
+    .value.trim();
+
+  if (!name) {
+    alert("Enter a project name first.");
+    return;
+  }
+
+  const project = {
+    id: String(Date.now()),
+    name,
+    start: document.getElementById("start").value,
+    end: document.getElementById("end").value,
+    bright: document.getElementById("bright").value,
+    contrast: document.getElementById("contrast").value,
+    resolution: document.getElementById("kbfcResolution").value,
+    fps: document.getElementById("kbfcFps").value,
+    quality: document.getElementById("kbfcQualityLevel").value,
+    filter: document.querySelector(".kbfc-filter-card.active")
+      ?.dataset.filter || "none",
+    savedAt: new Date().toISOString()
+  };
+
+  const projects = kbfcGetProjects();
+  projects.push(project);
+
+  try {
+    localStorage.setItem(
+      KBFC_PROJECTS_KEY,
+      JSON.stringify(projects)
+    );
+
+    kbfcRefreshProjects(project.id);
+    document.getElementById("projectMessage").textContent =
+      "Project saved successfully!";
+  } catch (error) {
+    alert("Could not save project. Browser storage may be full.");
+  }
+}
+
+function kbfcOpenProject() {
+  const id = document.getElementById("savedProjects").value;
+  const project = kbfcGetProjects().find(p => p.id === id);
+
+  if (!project) {
+    alert("Please select a saved project.");
+    return;
+  }
+
+  document.getElementById("projectName").value = project.name;
+  document.getElementById("start").value = project.start;
+  document.getElementById("end").value = project.end;
+  document.getElementById("bright").value = project.bright;
+  document.getElementById("contrast").value = project.contrast;
+  document.getElementById("kbfcResolution").value = project.resolution;
+  document.getElementById("kbfcFps").value = project.fps;
+  document.getElementById("kbfcQualityLevel").value = project.quality;
+
+  const filterButton = document.querySelector(
+    '.kbfc-filter-card[data-filter="' + project.filter + '"]'
+  );
+
+  if (filterButton) filterButton.click();
+
+  document.getElementById("projectMessage").textContent =
+    "Settings loaded. Please choose your video again.";
+}
+
+function kbfcDeleteProject() {
+  const id = document.getElementById("savedProjects").value;
+
+  if (!id) {
+    alert("Select a project to delete.");
+    return;
+  }
+
+  if (!confirm("Delete this saved project?")) return;
+
+  const projects = kbfcGetProjects().filter(p => p.id !== id);
+
+  localStorage.setItem(KBFC_PROJECTS_KEY, JSON.stringify(projects));
+  kbfcRefreshProjects();
+
+  document.getElementById("projectMessage").textContent =
+    "Project deleted.";
+}
+
+kbfcRefreshProjects();
+</script>
 </body>
 </html>
