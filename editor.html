@@ -298,15 +298,31 @@ const status=document.getElementById('status');
 const download=document.getElementById('download');
 let sourceURL='';
 
-file.onchange=()=>{
-  const f=file.files[0];
-  if(!f)return;
-  if(sourceURL)URL.revokeObjectURL(sourceURL);
-  sourceURL=URL.createObjectURL(f);
-  video.src=sourceURL;
+file.onchange = () => {
+  const f = file.files && file.files[0];
+
+  video.classList.remove('kbfc-video-ready');
+  result.classList.remove('kbfc-video-ready');
+  download.style.display = 'none';
+
+  if (!f) {
+    video.removeAttribute('src');
+    video.load();
+    return;
+  }
+
+  if (sourceURL) URL.revokeObjectURL(sourceURL);
+
+  sourceURL = URL.createObjectURL(f);
+  video.src = sourceURL;
   video.load();
-  status.textContent='Video loaded. Set start and end times.';
-  download.style.display='none';
+
+  status.textContent = 'Loading video...';
+
+  video.addEventListener('loadeddata', function showPreview() {
+    video.classList.add('kbfc-video-ready');
+    status.textContent = 'Video loaded. Set start and end times.';
+  }, { once: true });
 };
 
 document.getElementById('create').onclick=async()=>{
