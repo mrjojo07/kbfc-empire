@@ -173,7 +173,15 @@ button {
 <h1>⚽ KBFC EMPIRE</h1>
 <p style="text-align:center">Football Shorts Creator</p>
 
-<div class="card">
+<button
+  type="button"
+  id="kbfcOpenEditor"
+  onclick="document.getElementById('kbfcEditor').scrollIntoView({behavior:'smooth'})"
+>
+  🎬 Open Editor
+</button>
+
+<div class="card" id="kbfcEditor">
 <label>Choose your video</label>
 <input id="file" type="file" accept="video/*">
 <video id="video" controls playsinline></video>
