@@ -207,7 +207,13 @@ button {
     <span>START</span>
     <span>END</span>
   </div>
-
+  
+<div id="kbfcThumbnailTrack" class="kbfc-thumbnail-track" aria-label="Video thumbnails" style="display:flex;gap:3px;width:100%;min-height:54px;margin:10px 0;padding:4px;overflow-x:auto;background:#0d0e11;border:1px solid #30323a;border-radius:8px;box-sizing:border-box;">
+  <div class="kbfc-thumbnail-placeholder">
+    Video thumbnails will appear here
+  </div>
+</div>
+  
   <div class="kbfc-timeline-actions">
     <button type="button" id="kbfcPlay">▶ Play</button>
     <button type="button" id="kbfcSetStart">Set Start</button>
@@ -1953,6 +1959,74 @@ body {
       if (result) result.classList.remove('kbfc-video-ready');
     });
   }
+})();
+</script>
+
+<script>
+(function () {
+  const fileInput = document.getElementById('file');
+  const video = document.getElementById('video');
+  const track = document.getElementById('kbfcThumbnailTrack');
+
+  if (!fileInput || !video || !track) return;
+
+  fileInput.addEventListener('change', function () {
+    const file = fileInput.files && fileInput.files[0];
+    if (!file) return;
+
+    track.replaceChildren();
+
+    const source = document.createElement('video');
+    source.muted = true;
+    source.preload = 'metadata';
+    source.playsInline = true;
+    source.src = URL.createObjectURL(file);
+
+    source.addEventListener('loadedmetadata', function () {
+      const duration = source.duration;
+      if (!Number.isFinite(duration) || duration <= 0) return;
+
+      const count = Math.min(12, Math.max(4, Math.ceil(duration / 3)));
+      let index = 0;
+
+      function captureFrame() {
+        if (index >= count) {
+          URL.revokeObjectURL(source.src);
+          source.removeAttribute('src');
+          source.load();
+          return;
+        }
+
+        source.currentTime = duration * index / count;
+      }
+
+      source.addEventListener('seeked', function onSeeked() {
+        if (index >= count) return;
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 96;
+        canvas.height = 54;
+
+        const context = canvas.getContext('2d');
+        if (context) {
+          context.drawImage(source, 0, 0, canvas.width, canvas.height);
+
+          const thumbnail = document.createElement('img');
+          thumbnail.src = canvas.toDataURL('image/jpeg', 0.65);
+          thumbnail.alt = 'Video frame ' + (index + 1);
+          thumbnail.style.cssText =
+            'width:76px;height:48px;object-fit:cover;flex:0 0 76px;border-radius:4px;background:#202127;';
+
+          track.appendChild(thumbnail);
+        }
+
+        index++;
+        captureFrame();
+      });
+
+      captureFrame();
+    }, { once: true });
+  });
 })();
 </script>
 </body> 
