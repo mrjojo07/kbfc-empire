@@ -53,15 +53,117 @@
       font-size: 12px;
       color: #777984;
     }
+  
+<style>
+/* KBFC EMPIRE — Homepage animations */
+@keyframes kbfcCardEnter {
+  from { opacity: 0; transform: translateY(35px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes kbfcBallSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes kbfcTitleReveal {
+  from { opacity: 0; transform: translateY(18px); filter: blur(6px); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes kbfcButtonGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(255,204,35,0); }
+  50% { box-shadow: 0 0 24px rgba(255,204,35,.42); }
+}
+
+@keyframes kbfcLightSweep {
+  from { left: -80%; }
+  to   { left: 130%; }
+}
+
+@keyframes kbfcParticleFloat {
+  0%, 100% { transform: translateY(0); opacity: .2; }
+  50% { transform: translateY(-12px); opacity: .7; }
+}
+
+/* Homepage card */
+.kbfc-home-card {
+  position: relative;
+  overflow: hidden;
+  animation: kbfcCardEnter .9s cubic-bezier(.2,.75,.25,1) both;
+}
+
+/* Moving light across card */
+.kbfc-home-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 45%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent,
+    rgba(255,255,255,.055),
+    transparent
+  );
+  animation: kbfcLightSweep 3.8s ease-in-out 1s infinite;
+}
+
+/* Football icon */
+.kbfc-home-ball {
+  display: inline-block;
+  animation: kbfcBallSpin 8s linear infinite;
+  transform-origin: center;
+}
+
+/* Brand title */
+.kbfc-home-title {
+  animation: kbfcTitleReveal .8s ease-out .2s both;
+}
+
+/* Open Editor button */
+.kbfc-home-button {
+  position: relative;
+  overflow: hidden;
+  animation: kbfcButtonGlow 2.8s ease-in-out infinite;
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.kbfc-home-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.kbfc-home-button:active {
+  transform: scale(.98);
+}
+
+/* Respect reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+  .kbfc-home-card,
+  .kbfc-home-card::after,
+  .kbfc-home-ball,
+  .kbfc-home-title,
+  .kbfc-home-button {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>
   </style>
 </head>
 <body>
-  <main class="home">
-    <div class="ball">⚽</div>
-    <h1>KBFC EMPIRE</h1>
+  
+<main class="home">
+  <div class="kbfc-home-card">
+    <div class="football kbfc-home-ball">⚽</div>
+    <h1 class="kbfc-home-title">KBFC EMPIRE</h1>
     <p>Football Shorts Creator</p>
-    <a class="open" href="./editor.html">🎬 Open Editor</a>
+    <a href="editor.html" class="kbfc-home-button">Open Editor</a>
     <div class="footer">CREATE • EDIT • DOWNLOAD</div>
-  </main>
+  </div>
+</main>
 </body>
 </html>
