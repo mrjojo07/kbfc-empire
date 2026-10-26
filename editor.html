@@ -1917,6 +1917,27 @@ body {
   max-height: 48vh;
   object-fit: contain;
 }
+
+#kbfcThumbnailTrack img {
+  flex: 0 0 76px;
+  width: 76px;
+  height: 48px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease;
+}
+
+#kbfcThumbnailTrack img.kbfc-active-thumbnail {
+  border-color: #4f8cff;
+}
+
+#kbfcThumbnailTrack img:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
 </style>
 
 <script>
@@ -2048,6 +2069,36 @@ body {
 
     video.currentTime = video.duration * index / thumbnails.length;
   });
+})();
+</script>
+
+<script>
+(function () {
+  const video = document.getElementById('video');
+  const track = document.getElementById('kbfcThumbnailTrack');
+  if (!video || !track) return;
+
+  function updateActiveThumbnail() {
+    const thumbnails = Array.from(track.querySelectorAll('img'));
+    if (!thumbnails.length || !Number.isFinite(video.duration) ||
+        video.duration <= 0) return;
+
+    const index = Math.min(
+      thumbnails.length - 1,
+      Math.floor((video.currentTime / video.duration) * thumbnails.length)
+    );
+
+    thumbnails.forEach((thumbnail, i) => {
+      const active = i === index;
+      thumbnail.classList.toggle('kbfc-active-thumbnail', active);
+      thumbnail.setAttribute('aria-current', active ? 'true' : 'false');
+    });
+  }
+
+  video.addEventListener('timeupdate', updateActiveThumbnail);
+  video.addEventListener('seeked', updateActiveThumbnail);
+  track.addEventListener('click', () => requestAnimationFrame(updateActiveThumbnail));
+  video.addEventListener('loadedmetadata', updateActiveThumbnail);
 })();
 </script>
 </body> 
