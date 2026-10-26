@@ -1208,5 +1208,174 @@ function kbfcDeleteProject() {
 
 kbfcRefreshProjects();
 </script>
+
+<style>
+/* KBFC Empire — Mobile-first dark editor */
+:root {
+  color-scheme: dark;
+  --editor-bg: #101114;
+  --editor-panel: #1b1c20;
+  --editor-panel-2: #25262b;
+  --editor-border: #34353c;
+  --editor-text: #f5f5f7;
+  --editor-muted: #a1a1aa;
+  --editor-accent: #b7f34a;
+}
+
+html {
+  background: var(--editor-bg);
+}
+
+body {
+  margin: 0;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+body > main {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+body > main h1 {
+  color: var(--editor-text);
+  font-size: 25px;
+  letter-spacing: -0.7px;
+}
+
+body > main p {
+  color: var(--editor-muted);
+}
+
+.card {
+  background: var(--editor-panel) !important;
+  color: var(--editor-text) !important;
+  border: 1px solid var(--editor-border) !important;
+  border-radius: 16px !important;
+  padding: 15px !important;
+  margin: 12px 0 !important;
+  box-shadow: none !important;
+}
+
+.card h2,
+.card h3,
+.card label {
+  color: var(--editor-text) !important;
+}
+
+input,
+select,
+textarea {
+  box-sizing: border-box;
+  max-width: 100%;
+  background: var(--editor-panel-2) !important;
+  color: var(--editor-text) !important;
+  border: 1px solid var(--editor-border) !important;
+  border-radius: 10px;
+}
+
+.card input:not([type="file"]),
+.card select,
+.card textarea {
+  width: 100%;
+  min-height: 44px;
+}
+
+.card input[type="file"] {
+  width: 100%;
+  background: var(--editor-panel-2);
+  color: var(--editor-text);
+  border: 1px dashed #555760;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.card video,
+.card #videoPreview {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: 48vh;
+  object-fit: contain;
+  background: #080808;
+  border-radius: 12px;
+}
+
+.card button {
+  min-height: 44px;
+  padding: 11px 15px;
+  border: 1px solid var(--editor-border);
+  border-radius: 10px;
+  background: var(--editor-panel-2);
+  color: var(--editor-text);
+  font-weight: 650;
+}
+
+.card button:active {
+  transform: scale(0.98);
+}
+
+.card button:disabled {
+  opacity: 0.45;
+}
+
+.card a[download] {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--editor-accent);
+  color: #151710;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+#kbfcProjects {
+  border-color: #45464d !important;
+}
+
+#kbfcProjects button:first-of-type {
+  background: var(--editor-accent);
+  color: #151710;
+  border-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--editor-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  body > main {
+    padding: 8px;
+  }
+
+  body > main h1 {
+    font-size: 22px;
+  }
+
+  .card {
+    padding: 12px !important;
+    border-radius: 13px !important;
+  }
+
+  .card button {
+    margin: 4px 0;
+  }
+
+  .card video,
+  .card #videoPreview {
+    max-height: 40vh;
+  }
+}
+</style>
 </body>
 </html>
