@@ -2029,5 +2029,26 @@ body {
   });
 })();
 </script>
+
+<script>
+(function () {
+  const track = document.getElementById('kbfcThumbnailTrack');
+  const video = document.getElementById('video');
+
+  if (!track || !video) return;
+
+  track.addEventListener('click', function (event) {
+    const thumbnail = event.target.closest('img');
+    if (!thumbnail || !track.contains(thumbnail)) return;
+
+    const thumbnails = Array.from(track.querySelectorAll('img'));
+    const index = thumbnails.indexOf(thumbnail);
+
+    if (index < 0 || !Number.isFinite(video.duration)) return;
+
+    video.currentTime = video.duration * index / thumbnails.length;
+  });
+})();
+</script>
 </body> 
 </html>
