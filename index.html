@@ -52,6 +52,97 @@ body > .kbfc-effects {
   display: none;
 }
 </style>
+
+<style>
+/* KBFC Empire - Mobile Responsive */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  padding: 16px;
+}
+
+.card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+video,
+canvas,
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+  font-size: 16px;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: clamp(23px, 7vw, 32px);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .card button,
+  .card input,
+  .card select {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  #kbfcProfile {
+    top: 8px !important;
+    right: 8px !important;
+  }
+
+  #kbfcProfile > button {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #kbfcProfileMenu {
+    max-width: calc(100vw - 24px);
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+  }
+}
+</style>
 </head>
 <body>
 <main>
