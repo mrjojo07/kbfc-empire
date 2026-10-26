@@ -1833,5 +1833,65 @@ body {
   padding-bottom: 85px !important;
 }
 </style>
+
+<style>
+/* Hide empty video previews */
+#video,
+#result {
+  display: none;
+}
+
+#video.kbfc-video-ready,
+#result.kbfc-video-ready {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 48vh;
+  object-fit: contain;
+}
+</style>
+
+<script>
+(function () {
+  const input = document.getElementById('file');
+  const video = document.getElementById('video');
+  const result = document.getElementById('result');
+
+  if (video) {
+    video.classList.remove('kbfc-video-ready');
+
+    video.addEventListener('loadeddata', function () {
+      if (video.src && video.src !== window.location.href) {
+        video.classList.add('kbfc-video-ready');
+      }
+    });
+
+    video.addEventListener('emptied', function () {
+      video.classList.remove('kbfc-video-ready');
+    });
+  }
+
+  if (result) {
+    result.classList.remove('kbfc-video-ready');
+
+    result.addEventListener('loadeddata', function () {
+      if (result.src && result.src !== window.location.href) {
+        result.classList.add('kbfc-video-ready');
+      }
+    });
+
+    result.addEventListener('emptied', function () {
+      result.classList.remove('kbfc-video-ready');
+    });
+  }
+
+  if (input && video) {
+    input.addEventListener('change', function () {
+      video.classList.remove('kbfc-video-ready');
+      if (result) result.classList.remove('kbfc-video-ready');
+    });
+  }
+})();
+</script>
 </body> 
 </html>
