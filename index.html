@@ -143,10 +143,34 @@
 /* Respect reduced-motion settings */
 @media (prefers-reduced-motion: reduce) {
   .kbfc-home-card,
-  .kbfc-home-card::after,
   .kbfc-home-ball,
   .kbfc-home-title,
-  .kbfc-home-button {
+  
+.kbfc-home-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 28px;
+  background: #ffcc23;
+  color: #111111;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 700;
+  border: none;
+  border-radius: 14px;
+  animation: kbfcButtonGlow 2.8s ease-in-out infinite;
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.kbfc-home-button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.kbfc-home-button:active {
+  transform: scale(.98);
+}
+  {
     animation: none !important;
     transition: none !important;
   }
