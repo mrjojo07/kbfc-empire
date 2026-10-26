@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KBFC EMPIRE</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#10131c;color:white;font-family:Arial,sans-serif;padding:18px}
+main{max-width:520px;margin:auto}
+h1{color:#ffc928;text-align:center}
+p{color:#cbd0dc}
+.card{background:#1c2230;padding:16px;border-radius:14px;margin:14px 0}
+label{display:block;margin:14px 0 6px}
+input,button{width:100%;padding:12px;border-radius:8px;border:0;margin-top:5px}
+button{background:#ffc928;color:#151515;font-weight:bold;font-size:16px}
+video{width:100%;max-height:420px;background:#000;border-radius:10px;margin-top:12px}
+#status{white-space:pre-wrap;color:#ffc928}
+
+/* KBFC Empire Effects */
+.kbfc-effect-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.kbfc-effect-buttons button {
+  padding: 10px 14px;
+  border: 1px solid #555;
+  border-radius: 10px;
+  background: #202020;
+  color: white;
+  cursor: pointer;
+}
+
+.kbfc-effect-buttons button.active {
+  background: #e5a900;
+  color: black;
+}
+
+#kbfcEffectStatus {
+  font-size: 14px;
+  margin: 8px 0;
+}
+</style>
+<style>
+/* Login ചെയ്യുന്നതുവരെ Editor മറയ്ക്കുക */
+body > main,
+body > .kbfc-filters,
+body > .kbfc-effects {
+  display: none;
+}
+</style>
+
+<style>
+/* KBFC Empire - Mobile Responsive */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+main {
+  width: 100%;
+  max-width: 100%;
+  padding: 16px;
+}
+
+.card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+video,
+canvas,
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+select,
+textarea,
+button {
+  max-width: 100%;
+  font-size: 16px;
+}
+
+@media (max-width: 600px) {
+  main {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: clamp(23px, 7vw, 32px);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .card {
+    padding: 12px;
+  }
+
+  .card button,
+  .card input,
+  .card select {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  #kbfcProfile {
+    top: 8px !important;
+    right: 8px !important;
+  }
+
+  #kbfcProfile > button {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #kbfcProfileMenu {
+    max-width: calc(100vw - 24px);
+  }
+
+  video {
+    width: 100%;
+    height: auto;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+
+<div id="kbfcProfile" style="position:fixed;top:12px;right:12px;z-index:9999;">
+  <button onclick="kbfcToggleProfile()" style="border:0;border-radius:50%;width:44px;height:44px;background:#f5b82e;font-size:22px;cursor:pointer;">
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+     
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+     viewBox="0 0 24 24" fill="none" stroke="currentColor"
+     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+     style="display:block;margin:auto;">
+  <circle cx="12" cy="8" r="4"/>
+  <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+</svg>
+
+  <circle cx="12" cy="8" r="4"/>
+  <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+</svg>
+</button>
+  <div id="kbfcProfileMenu" style="display:none;background:#111827;color:white;padding:14px;border-radius:12px;margin-top:8px;min-width:160px;box-shadow:0 4px 16px #0005;">
+    <p id="kbfcProfileEmail" style="font-size:12px;overflow-wrap:anywhere;">My Profile</p>
+    <button onclick="kbfcLogout()" style="background:#dc2626;color:white;border:0;border-radius:8px;padding:10px;width:100%;cursor:pointer;">Logout</button>
+  </div>
+</div>
+<h1>⚽ KBFC EMPIRE</h1>
+<p style="text-align:center">Football Shorts Creator</p>
+
+<a href="./index.html"
+   style="display:block;text-align:center;padding:12px;
+   margin:10px 0;background:#25262b;color:white;
+   border-radius:10px;text-decoration:none;">
+  ← Back to Home
+</a>
+
+<div class="card" id="kbfcEditor">
+<label>Choose your video</label>
+<input id="file" type="file" accept="video/*">
+<video id="video" controls playsinline></video>
+
+<div id="kbfcTimeline" class="kbfc-timeline">
+  <div class="kbfc-timeline-head">
+    <strong>✂️ Timeline</strong>
+    <span id="kbfcCurrentTime">00:00 / 00:00</span>
+  </div>
+
+  <input
+    id="kbfcSeek"
+    type="range"
+    min="0"
+    max="100"
+    value="0"
+    step="0.1"
+    aria-label="Video timeline"
+  >
+
+  <div class="kbfc-time-labels">
+    <span>START</span>
+    <span>END</span>
+  </div>
+
+  <div class="kbfc-timeline-actions">
+    <button type="button" id="kbfcPlay">▶ Play</button>
+    <button type="button" id="kbfcSetStart">Set Start</button>
+    <button type="button" id="kbfcSetEnd">Set End</button>
+  </div>
+</div>
+
+<label>Start time (seconds)</label>
+<input id="start" type="number" min="0" value="0">
+
+<label>End time (seconds)</label>
+<input id="end" type="number" min="1" value="30">
+
+<label>Brightness</label>
+<input id="bright" type="range" min="50" max="150" value="100">
+
+<label>Contrast</label>
+<input id="contrast" type="range" min="50" max="150" value="100">
+
+<div id="kbfcQuality" style="margin:15px 0;padding:14px;background:#171717;border-radius:12px;color:white">
+  <h3>🎬 Pro Export Quality</h3>
+
+  <label for="kbfcResolution">Resolution</label>
+  <select id="kbfcResolution" style="display:block;width:100%;padding:10px;margin:8px 0 14px">
+    <option value="720">HD 720p · 30 FPS</option>
+    <option value="1080">Full HD 1080p · 60 FPS</option>
+    <option value="1440">2K 1440p · 60 FPS</option>
+    <option value="2160" selected>MAX 4K · 120 FPS</option>
+  </select>
+
+  <label for="kbfcFps">Frame Rate</label>
+  <select id="kbfcFps" style="display:block;width:100%;padding:10px;margin:8px 0 14px">
+    <option value="30">30 FPS</option>
+    <option value="60">60 FPS</option>
+    <option value="120" selected>120 FPS</option>
+  </select>
+
+  <label for="kbfcQualityLevel">Export Bitrate</label>
+  <select id="kbfcQualityLevel" style="display:block;width:100%;padding:10px;margin:8px 0">
+    <option value="5000000">High · 5 Mbps</option>
+    <option value="10000000">Very High · 10 Mbps</option>
+    <option value="16000000" selected>Ultra · 16 Mbps</option>
+  </select>
+
+  <p style="font-size:12px;color:#cbd5e1">
+    Higher settings need more processing power and storage.
+    Actual resolution and FPS depend on browser and device support.
+  </p>
+</div>
+<button id="create">CREATE SHORT</button>
+<p id="status">Choose a video to begin.</p>
+<video id="result" controls playsinline></video>
+<div class="card" id="kbfcProjects">
+  <h3>💾 My Projects</h3>
+
+  <label for="projectName">Project name</label>
+  <input id="projectName" type="text"
+         placeholder="e.g. KBFC Match Highlights">
+
+  <button type="button" onclick="kbfcSaveProject()">
+    Save Project
+  </button>
+
+  <label for="savedProjects">Saved projects</label>
+  <select id="savedProjects">
+    <option value="">Select a project</option>
+  </select>
+
+  <button type="button" onclick="kbfcOpenProject()">
+    Open Project
+  </button>
+
+  <button type="button" onclick="kbfcDeleteProject()">
+    Delete Project
+  </button>
+
+  <p id="projectMessage">Your projects will appear here.</p>
+</div>
+<a id="download" style="display:none;color:#ffc928" download="KBFC-Empire-Short.webm">DOWNLOAD EDITED VIDEO</a>
+</div>
+</main>
+
+<script>
+const file=document.getElementById('file');
+const video=document.getElementById('video');
+const result=document.getElementById('result');
+const status=document.getElementById('status');
+const download=document.getElementById('download');
+let sourceURL='';
+
+file.onchange=()=>{
+  const f=file.files[0];
+  if(!f)return;
+  if(sourceURL)URL.revokeObjectURL(sourceURL);
+  sourceURL=URL.createObjectURL(f);
+  video.src=sourceURL;
+  video.load();
+  status.textContent='Video loaded. Set start and end times.';
+  download.style.display='none';
+};
+
+document.getElementById('create').onclick=async()=>{
+  const f=file.files[0];
+  if(!f){status.textContent='Please choose a video first.';return;}
+  if(!video.videoWidth){status.textContent='Wait for the video to load, then try again.';return;}
+  if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream){
+    status.textContent='This browser does not support video export.';
+    return;
+  }
+
+  const start=Math.max(0,Number(document.getElementById('start').value)||0);
+  const end=Math.min(Number(document.getElementById('end').value)||30,video.duration);
+  if(end<=start){status.textContent='End time must be greater than start time.';return;}
+
+  const canvas=document.createElement('canvas');
+  
+const resolution = Number(document.getElementById('kbfcResolution')?.value || 1080);
+const fps = Math.min(
+  120,
+  Math.max(24, Number(document.getElementById('kbfcFps')?.value || 30))
+);
+
+const dimensions = {
+  720:  { width: 720,  height: 1280 },
+  1080: { width: 1080, height: 1920 },
+  1440: { width: 1440, height: 2560 },
+  2160: { width: 2160, height: 3840 }
+};
+
+canvas.width = dimensions[resolution].width;
+canvas.height = dimensions[resolution].height;
+
+const ctx = canvas.getContext('2d');
+const stream = canvas.captureStream(fps);
+
+  let audioContext=null;
+  let audioSource=null;
+
+  try{
+    audioContext=new AudioContext();
+    audioSource=audioContext.createMediaElementSource(video);
+    const audioDestination=audioContext.createMediaStreamDestination();
+    audioSource.connect(audioDestination);
+    audioDestination.stream.getAudioTracks().forEach(t=>stream.addTrack(t));
+
+}catch(e){
+  console.warn('Audio setup failed; exporting video without audio.', e);
+  status.textContent='Audio unavailable. Continuing video export without sound.';
+  try{
+    if(audioSource) audioSource.disconnect();
+  }catch(err){}
+  try{
+    if(audioContext) audioContext.close();
+  }catch(err){}
+  audioSource=null;
+  audioContext=null;
+}
+
+  let mime='video/webm;codecs=vp8,opus';
+  if(!MediaRecorder.isTypeSupported(mime))mime='video/webm';
+  let recorder;
+  try{
+    
+const bitrate = {
+  720:  5000000,
+  1080: 10000000,
+  1440: 20000000,
+  2160: 35000000
+}[resolution] || 10000000;
+recorder = new MediaRecorder(stream, {
+  mimeType: mime,
+  videoBitsPerSecond: bitrate,
+  audioBitsPerSecond: 128000
+});
+  }catch(e){
+    status.textContent='Cannot start video export in this browser.';
+    stream.getTracks().forEach(t=>t.stop());
+    return;
+  }
+
+  const chunks=[];
+  recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
+  recorder.onerror=()=>{
+    status.textContent='Export failed. Try a shorter clip.';
+  };
+  recorder.onstop=()=>{
+    const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'});
+    const url=URL.createObjectURL(blob);
+    result.src=url;
+    download.href=url;
+    download.style.display='block';
+    status.textContent='Finished! Check the edited video below.';
+    stream.getTracks().forEach(t=>t.stop());
+    try{audioSource.disconnect();}catch(e){}
+    if(audioContext)audioContext.close();
+  };
+
+  
+let raf = 0;
+let stopped = false;
+
+const draw = () => {
+  if (stopped) return;
+
+  const outW = canvas.width;
+  const outH = canvas.height;
+
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, outW, outH);
+
+  const vw = video.videoWidth;
+  const vh = video.videoHeight;
+
+  if (vw && vh) {
+    const scale = Math.min(outW / vw, outH / vh);
+    const dw = vw * scale;
+    const dh = vh * scale;
+    const dx = (outW - dw) / 2;
+    const dy = (outH - dh) / 2;
+
+    ctx.filter =
+      'brightness(' +
+      document.getElementById('bright').value +
+      '%) contrast(' +
+      document.getElementById('contrast').value +
+      '%)';
+
+    ctx.drawImage(video, dx, dy, dw, dh);
+    ctx.filter = 'none';
+  }
+
+  if (video.currentTime >= end || video.ended) {
+    stopped = true;
+    cancelAnimationFrame(raf);
+    video.pause();
+    if (recorder.state !== 'inactive') recorder.stop();
+    return;
+  }
+
+  raf = requestAnimationFrame(draw);
+};
+
+
+  status.textContent='Preparing video... Keep this page open.';
+  download.style.display='none';
+  try{
+    video.pause();
+    video.currentTime=start;
+    await new Promise((resolve,reject)=>{
+      const timeout=setTimeout(()=>reject(new Error('seek timeout')),15000);
+      video.addEventListener('seeked',()=>{clearTimeout(timeout);resolve();},{once:true});
+    });
+    if (audioContext && audioContext.state !== 'closed') {
+  await audioContext.resume();
+    }
+    video.playbackRate = 1;
+    await video.play();
+    recorder.start(1000);
+    draw();
+    status.textContent='Creating Short... Keep the screen on and do not leave this page.';
+
+    }catch(e){
+     console.error('EXPORT FAILED:', e);
+     stopped=true;
+     status.textContent='Export error: ' + (e.name || '') + ' - ' + (e.message || e);
+     try {
+       if(recorder && recorder.state !== 'inactive') recorder.stop();
+     } catch(err) {}
+   }
+
+ };
+</script>
+<script src="highlights.js"></script>
+<style>
+.kbfc-filters {
+  background:#111827;color:white;padding:14px;
+  border-radius:14px;margin:15px 0;
+}
+.kbfc-filter-grid {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+}
+.kbfc-filter-card {
+  color:white;background:#252b38;border:2px solid transparent;
+  border-radius:10px;padding:5px;cursor:pointer;
+  text-align:center;font-size:12px;
+}
+.kbfc-filter-card.active {border-color:#22c55e;}
+.kbfc-demo {
+  width:100%;aspect-ratio:1/1;border-radius:7px;
+  background:linear-gradient(135deg,#f5b942,#e94b3c 45%,#1769aa);
+  position:relative;overflow:hidden;margin-bottom:6px;
+}
+.kbfc-demo.cinema {filter:contrast(1.35) saturate(1.3);}
+.kbfc-demo.vintage {filter:sepia(.8) contrast(1.1);}
+.kbfc-demo.bw {filter:grayscale(1);}
+.kbfc-demo.warm {filter:sepia(.3) saturate(1.5);}
+.kbfc-demo.cool {filter:hue-rotate(25deg) saturate(1.2);}
+.kbfc-demo.vivid {filter:saturate(2) contrast(1.1);}
+</style>
+<div class="kbfc-filters">
+  <h3>🎨 Choose Your Filter</h3>
+  <p style="font-size:12px;color:#cbd5e1">
+    Tap a preview to apply it to your video
+  </p>
+  <div class="kbfc-filter-grid">
+    <button class="kbfc-filter-card active" data-filter="none">
+      <div class="kbfc-demo"></div>Original
+    </button>
+    <button class="kbfc-filter-card" data-filter="cinema">
+      <div class="kbfc-demo cinema"></div>Cinematic
+    </button>
+    <button class="kbfc-filter-card" data-filter="vintage">
+      <div class="kbfc-demo vintage"></div>Vintage
+    </button>
+    <button class="kbfc-filter-card" data-filter="bw">
+      <div class="kbfc-demo bw"></div>B&W
+    </button>
+    <button class="kbfc-filter-card" data-filter="warm">
+      <div class="kbfc-demo warm"></div>Warm
+    </button>
+    <button class="kbfc-filter-card" data-filter="cool">
+      <div class="kbfc-demo cool"></div>Cool
+    </button>
+    <button class="kbfc-filter-card" data-filter="vivid">
+      <div class="kbfc-demo vivid"></div>Vivid
+    </button>
+  </div>
+
+  <p id="kbfcFilterStatus">Selected: Original</p>
+</div>
+
+<script>
+(function () {
+  const cards = document.querySelectorAll('.kbfc-filter-card');
+  const video = document.getElementById('video');
+
+  const styles = {
+    none: 'none',
+    cinema: 'contrast(1.25) saturate(1.2)',
+    vintage: 'sepia(.65) contrast(1.1)',
+    bw: 'grayscale(1)',
+    warm: 'sepia(.25) saturate(1.4)',
+    cool: 'hue-rotate(18deg) saturate(1.15)',
+    vivid: 'saturate(1.8) contrast(1.1)'
+  };
+
+  cards.forEach(card => {
+    const demo = card.querySelector('.kbfc-demo');
+    if (demo) {
+      demo.style.backgroundImage =
+        "url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=300')";
+      demo.style.backgroundSize = 'cover';
+      demo.style.backgroundPosition = 'center';
+      demo.style.filter = styles[card.dataset.filter] || 'none';
+    }
+
+    card.addEventListener('click', () => {
+      cards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      const name = card.dataset.filter;
+      if (video) video.style.filter = styles[name] || 'none';
+
+      document.getElementById('kbfcFilterStatus').textContent =
+        'Selected: ' + card.textContent.trim();
+    });
+  });
+})();
+</script>
+<style>
+.kbfc-effects {
+  background:#111827;color:white;padding:14px;
+  border-radius:14px;margin:15px 0;
+}
+.kbfc-effect-grid {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.kbfc-effect-card {
+  background:#252b38;color:white;border:2px solid transparent;
+  border-radius:10px;padding:5px;font-size:12px;
+}
+.kbfc-effect-card.active {border-color:#22c55e;}
+
+.kbfc-effect-demo {
+  aspect-ratio: 1 / 1;
+  border-radius: 7px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  background-image: url("https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=300");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 90px;
+}
+
+.kbfc-effect-demo.glow {
+  filter: brightness(1.25) contrast(1.1);
+}
+
+.kbfc-effect-demo.flash {
+  filter: brightness(1.5);
+}
+
+.kbfc-effect-demo.blur {
+  filter: blur(1px);
+}
+
+.kbfc-effect-demo.zoom {
+  background-size: 150%;
+}
+
+.kbfc-effect-demo.vignette {
+  box-shadow: inset 0 0 20px #000;
+}
+
+.kbfc-effect-demo.shake {
+  filter: saturate(1.5);
+}
+
+.kbfc-effect-demo.bw {
+  filter: grayscale(1);
+}
+
+.kbfc-effect-demo.slow {
+  filter: sepia(0.3);
+}
+.kbfc-effect-demo.glow {text-shadow:0 0 12px white;filter:brightness(1.35);}
+.kbfc-effect-demo.flash {background:white;color:#ef4444;}
+.kbfc-effect-demo.blur {filter:blur(2px);}
+.kbfc-effect-demo.zoom {font-size:48px;}
+.kbfc-effect-demo.vignette {box-shadow:inset 0 0 28px 12px black;}
+.kbfc-effect-demo.shake {transform:rotate(-8deg);}
+.kbfc-effect-demo.bw {filter:grayscale(1);}
+.kbfc-effect-demo.slow {background:linear-gradient(90deg,#111827,#38bdf8,#111827);}
+</style>
+
+<div class="kbfc-effects">
+  <h3>⚡ Choose Your Effect</h3>
+  <p style="font-size:12px;color:#cbd5e1">Tap an effect to select it</p>
+  <div class="kbfc-effect-grid">
+    <button class="kbfc-effect-card active" data-effect="none">None
+    
+<button class="kbfc-effect-card active" data-effect="none">
+  <div class="kbfc-effect-demo"></div>None
+</button>
+<button class="kbfc-effect-card" data-effect="glow">
+  <div class="kbfc-effect-demo glow"></div>Glow
+</button>
+<button class="kbfc-effect-card" data-effect="flash">
+  <div class="kbfc-effect-demo flash"></div>Flash
+</button>
+<button class="kbfc-effect-card" data-effect="blur">
+  <div class="kbfc-effect-demo blur"></div>Blur
+</button>
+<button class="kbfc-effect-card" data-effect="zoom">
+  <div class="kbfc-effect-demo zoom"></div>Zoom
+</button>
+<button class="kbfc-effect-card" data-effect="vignette">
+  <div class="kbfc-effect-demo vignette"></div>Vignette
+</button>
+<button class="kbfc-effect-card" data-effect="shake">
+  <div class="kbfc-effect-demo shake"></div>Shake
+</button>
+<button class="kbfc-effect-card" data-effect="bw">
+  <div class="kbfc-effect-demo bw"></div>B&W
+</button>
+<button class="kbfc-effect-card" data-effect="slow">
+  <div class="kbfc-effect-demo slow"></div>Slow Motion
+</button>
+  </div>
+  <p id="kbfcEffectStatus">Selected: None</p>
+</div>
+
+<script>
+(function () {
+  const cards = document.querySelectorAll('.kbfc-effect-card');
+  const video = document.getElementById('video');
+
+  const css = {
+    none: 'none',
+    glow: 'brightness(1.2) contrast(1.1)',
+    flash: 'brightness(1.5)',
+    blur: 'blur(2px)',
+    zoom: 'none',
+    vignette: 'contrast(1.2)',
+    shake: 'none',
+    bw: 'grayscale(1)',
+    slow: 'none'
+  };
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      cards.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      const effect = card.dataset.effect;
+      if (video) video.style.filter = css[effect];
+
+      document.getElementById('kbfcEffectStatus').textContent =
+        'Selected: ' + card.textContent.trim();
+    });
+  });
+})();
+
+const effectButtons = document.querySelectorAll(
+  '#kbfcEffects [data-effect]'
+);
+
+let selectedEffect = 'none';
+
+effectButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    effectButtons.forEach(b => b.classList.remove('active'));
+    button.classList.add('active');
+
+    selectedEffect = button.dataset.effect;
+
+    const effectStyles = {
+      none: 'none',
+      glow: 'brightness(1.2) contrast(1.1)',
+      blur: 'blur(2px)',
+      flash: 'brightness(1.7)',
+      shake: 'contrast(1.2)'
+    };
+
+    const effectStatus = document.getElementById('kbfcEffectStatus');
+    if (effectStatus) {
+      effectStatus.textContent =
+        'Selected effect: ' + selectedEffect;
+    }
+
+    if (video) {
+      video.style.filter = effectStyles[selectedEffect] || 'none';
+    }
+  });
+});
+</script>
+
+<!-- KBFC Empire Login / Signup -->
+<section id="authBox" style="max-width:360px;margin:25px auto;padding:20px;border:1px solid #444;border-radius:12px;background:#111;color:white;font-family:Arial">
+  <h2>KBFC Empire</h2>
+  <h3>Login / Sign Up</h3>
+
+  <input id="authEmail" type="email" placeholder="Email address"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:6px 0">
+
+  <input id="authPassword" type="password" placeholder="Password (minimum 6 characters)"
+    style="box-sizing:border-box;width:100%;padding:12px;margin:6px 0">
+
+  <button onclick="kbfcSignUp()" style="padding:12px;width:100%;margin-top:8px">Sign Up</button>
+  <button onclick="kbfcLogin()" style="padding:12px;width:100%;margin-top:8px">Login</button>
+  <button onclick="kbfcLogout()" style="padding:12px;width:100%;margin-top:8px">Logout</button>
+
+  <p id="authMessage">Please login or create an account.</p>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const KBFC_SUPABASE_URL = "https://ortflloyumbyizeveboj.supabase.co";
+const KBFC_SUPABASE_KEY = "sb_publishable_WJAxQj68TRlHXanHV7Xe1A_8NEu8RTG";
+
+const kbfcSupabase = window.supabase.createClient(
+  KBFC_SUPABASE_URL,
+  KBFC_SUPABASE_KEY
+);
+
+async function kbfcCheckSession() {
+  const { data: { session } } = await kbfcSupabase.auth.getSession();
+
+  const authBox = document.getElementById("authBox");
+  const main = document.querySelector("body > main");
+  const extra = document.querySelectorAll(
+    "body > .kbfc-filters, body > .kbfc-effects"
+  );
+
+  if (session) {
+    authBox.style.display = "none";
+    main.style.display = "block";
+    extra.forEach(el => el.style.display = "block");
+  } else {
+    authBox.style.display = "block";
+    main.style.display = "none";
+    extra.forEach(el => el.style.display = "none");
+  }
+}
+
+kbfcCheckSession();
+
+async function kbfcSignUp() {
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+
+  const { error } = await kbfcSupabase.auth.signUp({ email, password });
+  message.textContent = error ? error.message :
+    "Account created. Check your email if confirmation is required.";
+}
+
+
+async function kbfcLogin() {
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const message = document.getElementById("authMessage");
+
+  const { data, error } = await kbfcSupabase.auth.signInWithPassword({
+    email,
+    password
+  });
+
+  if (error) {
+    message.textContent = "Login പരാജയപ്പെട്ടു: " + error.message;
+    return;
+  }
+
+  document.getElementById("authBox").style.display = "none";
+  document.querySelector("body > main").style.display = "block";
+
+  document.querySelectorAll(
+    "body > .kbfc-filters, body > .kbfc-effects"
+  ).forEach(el => el.style.display = "block");
+
+  message.textContent = "Login വിജയിച്ചു!";
+}
+
+
+function kbfcToggleProfile() {
+  const menu = document.getElementById("kbfcProfileMenu");
+  menu.style.display =
+    menu.style.display === "block" ? "none" : "block";
+
+  const emailBox = document.getElementById("kbfcProfileEmail");
+
+  if (window.kbfcSupabase) {
+    window.kbfcSupabase.auth.getUser().then(({ data }) => {
+      if (data.user) emailBox.textContent = data.user.email;
+    });
+  }
+}
+
+  async function kbfcLogout() {
+  const { error } = await kbfcSupabase.auth.signOut();
+
+  if (error) {
+    document.getElementById("authMessage").textContent = error.message;
+    return;
+  }
+
+  document.getElementById("authBox").style.display = "block";
+  document.querySelector("body > main").style.display = "none";
+
+  document.querySelectorAll(
+    "body > .kbfc-filters, body > .kbfc-effects"
+  ).forEach(el => el.style.display = "none");
+
+  document.getElementById("authMessage").textContent = "നിങ്ങൾ Logout ചെയ്തു.";
+
+}
+</script>
+
+<style>
+/* KBFC Empire - Clean Modern UI */
+:root {
+  --kbfc-bg: #f4f6fa;
+  --kbfc-card: #ffffff;
+  --kbfc-text: #172033;
+  --kbfc-muted: #687386;
+  --kbfc-primary: #2457d6;
+  --kbfc-border: #e2e7f0;
+}
+
+body {
+  background: var(--kbfc-bg);
+  color: var(--kbfc-text);
+  font-family: Inter, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+body > main {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+body > main h1 {
+  font-size: clamp(25px, 5vw, 36px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 4px;
+}
+
+body > main p {
+  color: var(--kbfc-muted);
+}
+
+.card {
+  background: var(--kbfc-card);
+  border: 1px solid var(--kbfc-border);
+  border-radius: 18px;
+  padding: 22px;
+  margin: 18px 0;
+  box-shadow: 0 6px 24px rgba(20, 35, 65, 0.05);
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+input, select, textarea {
+  max-width: 100%;
+  border: 1px solid var(--kbfc-border);
+  border-radius: 10px;
+  padding: 11px;
+  background: white;
+  color: var(--kbfc-text);
+}
+
+video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 14px;
+  background: #101522;
+}
+
+#kbfcProfileMenu {
+  background: white !important;
+  color: var(--kbfc-text) !important;
+  border: 1px solid var(--kbfc-border);
+  box-shadow: 0 12px 32px rgba(20, 35, 65, 0.15) !important;
+}
+
+@media (max-width: 600px) {
+  body > main {
+    padding: 12px;
+  }
+
+  .card {
+    padding: 15px;
+    border-radius: 14px;
+  }
+
+  button {
+    min-height: 44px;
+  }
+
+  input, select {
+    width: 100%;
+  }
+}
+</style>
+
+<style>
+/* Clean video preview layout */
+.card video,
+.card #videoPreview {
+  width: 100%;
+  max-height: 65vh;
+  object-fit: contain;
+  background: #111827;
+  border-radius: 14px;
+  margin: 12px 0;
+}
+
+.card label {
+  display: block;
+  font-weight: 600;
+  color: #344054;
+  margin: 14px 0 6px;
+}
+
+.card input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px dashed #b9c5d8;
+  border-radius: 12px;
+}
+
+.card input[type="range"] {
+  width: 100%;
+  accent-color: #2457d6;
+}
+
+.card button {
+  background: #2457d6;
+  color: #fff;
+  margin: 5px 4px 5px 0;
+}
+
+.card button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .card video,
+  .card #videoPreview {
+    max-height: 45vh;
+  }
+}
+</style>
+
+<style>
+/* Clean editing controls */
+.card input:not([type="file"]),
+.card select,
+.card textarea {
+  display: block;
+  width: 100%;
+  margin: 6px 0 14px;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.card input[type="range"] {
+  padding: 0;
+  min-height: 28px;
+}
+
+.card label {
+  font-size: 14px;
+  font-weight: 650;
+  margin-top: 16px;
+  color: #344054;
+}
+
+.card h2,
+.card h3 {
+  color: #172033;
+  letter-spacing: -0.3px;
+}
+
+.card button {
+  min-height: 44px;
+  padding: 11px 16px;
+  border-radius: 10px;
+}
+
+.card a[download] {
+  display: inline-block;
+  padding: 12px 16px;
+  margin-top: 10px;
+  background: #15803d;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  .card button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+</style>
+
+<style>
+/* Clean export and download area */
+.card a[download],
+.card button[id*="download"],
+.card button[id*="Download"] {
+  background: #15803d;
+  color: #fff;
+}
+
+.card a[download]:hover,
+.card button[id*="download"]:hover,
+.card button[id*="Download"]:hover {
+  background: #166534;
+}
+
+.card a[download] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.card progress {
+  display: block;
+  width: 100%;
+  height: 10px;
+  accent-color: #2457d6;
+  border-radius: 99px;
+}
+
+.card output {
+  font-weight: 700;
+  color: #2457d6;
+}
+
+.card video:focus-visible,
+.card button:focus-visible,
+.card input:focus-visible,
+.card select:focus-visible {
+  outline: 3px solid #93b4ff;
+  outline-offset: 2px;
+}
+</style>
+<script>
+const KBFC_PROJECTS_KEY = "kbfcEmpireProjects";
+
+function kbfcGetProjects() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(KBFC_PROJECTS_KEY) || "[]"
+    );
+  } catch (error) {
+    return [];
+  }
+}
+
+function kbfcRefreshProjects(selectedId = "") {
+  const select = document.getElementById("savedProjects");
+  const projects = kbfcGetProjects();
+
+  select.innerHTML = '<option value="">Select a project</option>';
+
+  projects.forEach(project => {
+    const option = document.createElement("option");
+    option.value = project.id;
+    option.textContent = project.name;
+    select.appendChild(option);
+  });
+
+  select.value = selectedId;
+}
+
+function kbfcSaveProject() {
+  const name = document.getElementById("projectName")
+    .value.trim();
+
+  if (!name) {
+    alert("Enter a project name first.");
+    return;
+  }
+
+  const project = {
+    id: String(Date.now()),
+    name,
+    start: document.getElementById("start").value,
+    end: document.getElementById("end").value,
+    bright: document.getElementById("bright").value,
+    contrast: document.getElementById("contrast").value,
+    resolution: document.getElementById("kbfcResolution").value,
+    fps: document.getElementById("kbfcFps").value,
+    quality: document.getElementById("kbfcQualityLevel").value,
+    filter: document.querySelector(".kbfc-filter-card.active")
+      ?.dataset.filter || "none",
+    savedAt: new Date().toISOString()
+  };
+
+  const projects = kbfcGetProjects();
+  projects.push(project);
+
+  try {
+    localStorage.setItem(
+      KBFC_PROJECTS_KEY,
+      JSON.stringify(projects)
+    );
+
+    kbfcRefreshProjects(project.id);
+    document.getElementById("projectMessage").textContent =
+      "Project saved successfully!";
+  } catch (error) {
+    alert("Could not save project. Browser storage may be full.");
+  }
+}
+
+function kbfcOpenProject() {
+  const id = document.getElementById("savedProjects").value;
+  const project = kbfcGetProjects().find(p => p.id === id);
+
+  if (!project) {
+    alert("Please select a saved project.");
+    return;
+  }
+
+  document.getElementById("projectName").value = project.name;
+  document.getElementById("start").value = project.start;
+  document.getElementById("end").value = project.end;
+  document.getElementById("bright").value = project.bright;
+  document.getElementById("contrast").value = project.contrast;
+  document.getElementById("kbfcResolution").value = project.resolution;
+  document.getElementById("kbfcFps").value = project.fps;
+  document.getElementById("kbfcQualityLevel").value = project.quality;
+
+  const filterButton = document.querySelector(
+    '.kbfc-filter-card[data-filter="' + project.filter + '"]'
+  );
+
+  if (filterButton) filterButton.click();
+
+  document.getElementById("projectMessage").textContent =
+    "Settings loaded. Please choose your video again.";
+}
+
+function kbfcDeleteProject() {
+  const id = document.getElementById("savedProjects").value;
+
+  if (!id) {
+    alert("Select a project to delete.");
+    return;
+  }
+
+  if (!confirm("Delete this saved project?")) return;
+
+  const projects = kbfcGetProjects().filter(p => p.id !== id);
+
+  localStorage.setItem(KBFC_PROJECTS_KEY, JSON.stringify(projects));
+  kbfcRefreshProjects();
+
+  document.getElementById("projectMessage").textContent =
+    "Project deleted.";
+}
+
+kbfcRefreshProjects();
+</script>
+
+<style>
+/* KBFC Empire — Mobile-first dark editor */
+:root {
+  color-scheme: dark;
+  --editor-bg: #101114;
+  --editor-panel: #1b1c20;
+  --editor-panel-2: #25262b;
+  --editor-border: #34353c;
+  --editor-text: #f5f5f7;
+  --editor-muted: #a1a1aa;
+  --editor-accent: #b7f34a;
+}
+
+html {
+  background: var(--editor-bg);
+}
+
+body {
+  margin: 0;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+body > main {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+body > main h1 {
+  color: var(--editor-text);
+  font-size: 25px;
+  letter-spacing: -0.7px;
+}
+
+body > main p {
+  color: var(--editor-muted);
+}
+
+.card {
+  background: var(--editor-panel) !important;
+  color: var(--editor-text) !important;
+  border: 1px solid var(--editor-border) !important;
+  border-radius: 16px !important;
+  padding: 15px !important;
+  margin: 12px 0 !important;
+  box-shadow: none !important;
+}
+
+.card h2,
+.card h3,
+.card label {
+  color: var(--editor-text) !important;
+}
+
+input,
+select,
+textarea {
+  box-sizing: border-box;
+  max-width: 100%;
+  background: var(--editor-panel-2) !important;
+  color: var(--editor-text) !important;
+  border: 1px solid var(--editor-border) !important;
+  border-radius: 10px;
+}
+
+.card input:not([type="file"]),
+.card select,
+.card textarea {
+  width: 100%;
+  min-height: 44px;
+}
+
+.card input[type="file"] {
+  width: 100%;
+  background: var(--editor-panel-2);
+  color: var(--editor-text);
+  border: 1px dashed #555760;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.card video,
+.card #videoPreview {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  max-height: 48vh;
+  object-fit: contain;
+  background: #080808;
+  border-radius: 12px;
+}
+
+.card button {
+  min-height: 44px;
+  padding: 11px 15px;
+  border: 1px solid var(--editor-border);
+  border-radius: 10px;
+  background: var(--editor-panel-2);
+  color: var(--editor-text);
+  font-weight: 650;
+}
+
+.card button:active {
+  transform: scale(0.98);
+}
+
+.card button:disabled {
+  opacity: 0.45;
+}
+
+.card a[download] {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--editor-accent);
+  color: #151710;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+#kbfcProjects {
+  border-color: #45464d !important;
+}
+
+#kbfcProjects button:first-of-type {
+  background: var(--editor-accent);
+  color: #151710;
+  border-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--editor-accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  body > main {
+    padding: 8px;
+  }
+
+  body > main h1 {
+    font-size: 22px;
+  }
+
+  .card {
+    padding: 12px !important;
+    border-radius: 13px !important;
+  }
+
+  .card button {
+    margin: 4px 0;
+  }
+
+  .card video,
+  .card #videoPreview {
+    max-height: 40vh;
+  }
+}
+</style>
+
+<style>
+.kbfc-timeline {
+  background: #1b1c20;
+  border: 1px solid #34353c;
+  border-radius: 14px;
+  padding: 14px;
+  margin: 12px 0;
+  color: #f5f5f7;
+}
+.kbfc-timeline-head,
+.kbfc-time-labels,
+.kbfc-timeline-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.kbfc-timeline-head span,
+.kbfc-time-labels {
+  color: #a1a1aa;
+  font-size: 12px;
+}
+#kbfcSeek {
+  width: 100%;
+  accent-color: #b7f34a;
+  margin: 16px 0 8px;
+}
+.kbfc-timeline-actions button {
+  flex: 1;
+  min-height: 42px;
+  background: #292a30;
+  color: white;
+  border: 1px solid #45464d;
+  border-radius: 9px;
+}
+@media(max-width: 380px) {
+  .kbfc-timeline-actions {
+    flex-wrap: wrap;
+  }
+}
+</style>
+
+<script>
+(function () {
+  const video = document.getElementById("video");
+  const seek = document.getElementById("kbfcSeek");
+  const time = document.getElementById("kbfcCurrentTime");
+  const play = document.getElementById("kbfcPlay");
+  const start = document.getElementById("start");
+  const end = document.getElementById("end");
+
+  if (!video || !seek || !time || !play || !start || !end) return;
+
+  function stamp(seconds) {
+    if (!Number.isFinite(seconds)) seconds = 0;
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return String(m).padStart(2, "0") + ":" +
+           String(s).padStart(2, "0");
+  }
+
+  function updateTimeline() {
+    const duration = Number.isFinite(video.duration) ? video.duration : 0;
+    seek.max = duration || 100;
+    seek.value = video.currentTime || 0;
+    time.textContent = stamp(video.currentTime) + " / " + stamp(duration);
+  }
+
+  video.addEventListener("loadedmetadata", updateTimeline);
+  video.addEventListener("timeupdate", updateTimeline);
+  video.addEventListener("durationchange", updateTimeline);
+
+  seek.addEventListener("input", function () {
+    if (Number.isFinite(video.duration)) {
+      video.currentTime = Number(seek.value);
+    }
+  });
+
+  play.addEventListener("click", function () {
+    if (!video.src) {
+      alert("ആദ്യം ഒരു വീഡിയോ Upload ചെയ്യൂ.");
+      return;
+    }
+    if (video.paused) {
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
+  });
+
+  video.addEventListener("play", () => play.textContent = "⏸ Pause");
+  video.addEventListener("pause", () => play.textContent = "▶ Play");
+
+  document.getElementById("kbfcSetStart").addEventListener("click", () => {
+    start.value = video.currentTime.toFixed(1);
+  });
+
+  document.getElementById("kbfcSetEnd").addEventListener("click", () => {
+    end.value = video.currentTime.toFixed(1);
+  });
+})();
+</script>
+</body> 
+</html>
