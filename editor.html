@@ -1938,6 +1938,46 @@ body {
   outline: 2px solid #ffffff;
   outline-offset: 2px;
 }
+
+#kbfcThumbnailTrack {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+  min-height: 54px;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  background: #101114;
+  border: 1px solid #30323a;
+  border-radius: 6px;
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
+
+#kbfcThumbnailTrack::-webkit-scrollbar {
+  display: none;
+}
+
+#kbfcThumbnailTrack img {
+  display: block;
+  flex: 0 0 76px;
+  width: 76px;
+  height: 54px;
+  margin: 0;
+  padding: 0;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+#kbfcThumbnailTrack img.kbfc-active-thumbnail {
+  outline: 2px solid #4f8cff;
+  outline-offset: -2px;
+}
 </style>
 
 <script>
