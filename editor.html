@@ -1643,5 +1643,195 @@ h1, h2, h3 {
   }
 }
 </style>
+
+<style>
+/* KBFC PRO EDITOR UI */
+:root {
+  --kbfc-yellow: #ffcc22;
+  --kbfc-bg: #0c0d10;
+  --kbfc-card: #191a1f;
+  --kbfc-border: #303139;
+  --kbfc-text: #f7f7f8;
+  --kbfc-muted: #9b9ca7;
+}
+
+body {
+  background: var(--kbfc-bg) !important;
+  color: var(--kbfc-text) !important;
+  font-family: Inter, Arial, sans-serif !important;
+}
+
+body > main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+h1 {
+  color: var(--kbfc-yellow);
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+h2, h3 {
+  color: var(--kbfc-text);
+}
+
+p {
+  line-height: 1.5;
+}
+
+.card, #kbfcEditor, #kbfcProjects,
+.kbfc-filters, .kbfc-effects {
+  background: var(--kbfc-card) !important;
+  border: 1px solid var(--kbfc-border) !important;
+  border-radius: 18px !important;
+  padding: 15px !important;
+  margin: 14px 0 !important;
+  box-shadow: 0 8px 24px #00000025;
+}
+
+video {
+  width: 100%;
+  max-height: 48vh;
+  object-fit: contain;
+  background: #050505;
+  border-radius: 14px;
+}
+
+button, select, input, textarea {
+  font: inherit;
+  border-radius: 10px;
+}
+
+button {
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid var(--kbfc-border);
+  background: #282930;
+  color: white;
+  margin: 4px 2px;
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+#create, #download, #kbfcOpenEditor {
+  background: var(--kbfc-yellow) !important;
+  color: #111 !important;
+  border: none !important;
+  font-weight: 800 !important;
+}
+
+input:not([type="range"]),
+select, textarea {
+  background: #222329;
+  color: white;
+  border: 1px solid #3b3c45;
+  padding: 11px;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--kbfc-yellow);
+}
+
+a {
+  overflow-wrap: anywhere;
+}
+
+#status {
+  color: var(--kbfc-yellow);
+  font-weight: 600;
+}
+
+@media (max-width: 600px) {
+  body > main {
+    padding: 10px;
+  }
+
+  .card, #kbfcEditor, #kbfcProjects,
+  .kbfc-filters, .kbfc-effects {
+    padding: 12px !important;
+    border-radius: 14px !important;
+  }
+
+  video {
+    max-height: 36vh;
+  }
+
+  #create, #download {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+  }
+
+  button {
+    min-height: 44px;
+  }
+}
+</style>
+    
+<!-- KBFC PRO bottom toolbar -->
+<nav id="kbfcBottomBar" aria-label="Editor tools">
+  <button onclick="document.getElementById('kbfcEditor').scrollIntoView({behavior:'smooth'})">
+    <span>🎬</span><small>Editor</small>
+  </button>
+  <button onclick="document.getElementById('kbfcTimeline').scrollIntoView({behavior:'smooth'})">
+    <span>✂️</span><small>Timeline</small>
+  </button>
+  <button onclick="document.querySelector('.kbfc-filters')?.scrollIntoView({behavior:'smooth'})">
+    <span>🎨</span><small>Filters</small>
+  </button>
+  <button onclick="document.querySelector('.kbfc-effects')?.scrollIntoView({behavior:'smooth'})">
+    <span>✨</span><small>Effects</small>
+  </button>
+  <button onclick="document.getElementById('kbfcProjects').scrollIntoView({behavior:'smooth'})">
+    <span>📁</span><small>Projects</small>
+  </button>
+</nav>
+
+<style>
+#kbfcBottomBar {
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 3px calc(8px + env(safe-area-inset-bottom));
+  background: #15161b;
+  border-top: 1px solid #373840;
+  box-shadow: 0 -5px 22px #0008;
+}
+#kbfcBottomBar button {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 2px;
+  margin: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+#kbfcBottomBar button span {
+  font-size: 21px;
+}
+#kbfcBottomBar button small {
+  font-size: 10px;
+  color: #ffcc22;
+}
+body {
+  padding-bottom: 85px !important;
+}
+</style>
 </body> 
 </html>
