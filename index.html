@@ -93,24 +93,6 @@
   animation: kbfcCardEnter .9s cubic-bezier(.2,.75,.25,1) both;
 }
 
-/* Moving light across card */
-.kbfc-home-card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -80%;
-  width: 45%;
-  height: 100%;
-  pointer-events: none;
-  background: linear-gradient(
-    110deg,
-    transparent,
-    rgba(255,255,255,.055),
-    transparent
-  );
-  animation: kbfcLightSweep 3.8s ease-in-out 1s infinite;
-}
-
 /* Football icon */
 .kbfc-home-ball {
   display: inline-block;
